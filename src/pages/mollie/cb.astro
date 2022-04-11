@@ -1,0 +1,39 @@
+---
+import Main from '../../layouts/Main.astro';
+import CanvasBg from '../../layouts/CanvasBg.astro';
+
+import { isLoggedIn } from '../utils/auth.js';
+const user = await isLoggedIn(Astro.request);
+
+const params = new URL(Astro.request.url);
+const code = params.searchParams.get('code');
+
+let message;
+let title;
+
+switch(code) {
+	case 'CANCEL_OK':
+		title = 'Cancel';
+		message = 'Successfully canceled subscription.';
+		break;
+	case 'FIRST_PAYMENT_OK':
+		title = 'Subscription';
+		message = 'Successfully subscribed.';
+		break;
+	default:
+		title = '';
+		message = '';
+}
+---
+<Main title="Success" user={user}>
+	<CanvasBg>
+		<h1>{title}</h1>
+		<div class="card">
+			<p>{message}</p>
+			{code === 'FIRST_PAYMENT_OK'
+				? <a href="/sw/0" class="linkbutton-secondary outline">Start course</a>
+				: ''
+			}
+		</div>
+	</CanvasBg>
+</Main>

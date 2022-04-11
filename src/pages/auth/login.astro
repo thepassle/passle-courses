@@ -1,0 +1,25 @@
+---
+import { isLoggedIn } from '../utils/auth.js';
+import Main from '../../layouts/Main.astro';
+import CanvasBg from '../../layouts/CanvasBg.astro';
+
+const user = await isLoggedIn(Astro.request);
+---
+<Main user={user}>
+	<CanvasBg>
+		<h1>Log in</h1>
+		<div class="card">
+			{user.authed
+				? <div>
+						<p>Welcome {user.name}</p>
+					</div>
+				: <div>
+						<p>Please log in.</p>
+						<div id="buttonDiv"></div>
+				</div>
+			}
+		</div>
+
+		<script>window.onload=function(){google.accounts.id.initialize({client_id:"120459150147-600c7qgmmfdv41j8dm4iifrmpar2bqgc.apps.googleusercontent.com",ux_mode:"redirect",login_uri:"https://my-astro-course.netlify.app/auth/success"}),google.accounts.id.renderButton(document.getElementById("buttonDiv"),{type: 'button', theme:"filled_blue",size:"large"})};</script>
+	</CanvasBg>
+</Main>

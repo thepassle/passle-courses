@@ -1,0 +1,168 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const { title = 'Passle Courses', user = {authed: false} } = Astro.props;
+---
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;800&display=swap" rel="stylesheet">
+		<title>{title}</title>
+		<style is:global>
+			* {
+				margin: 0;
+				padding: 0;
+				font-family: 'Poppins', sans-serif;
+				font-weight: 300;
+			}
+
+			*:focus {
+				border-radius: 4px;
+				box-shadow: rgb(0, 82, 255) 0px 0px 12px, rgb(0, 82, 255) 0px 0px 0px 1px;
+				outline: 1px;
+				transition: box-shadow 0.1s ease-in-out 0s;
+			}
+
+      .linkbutton-main {
+        display: inline-block;
+        user-select: none;
+        padding: 10px 26px;
+        border-radius: 6px;
+        font-family: Poppins;
+        font-weight: 500;
+        font-size: 16px;
+        text-decoration: none;
+        box-shadow: rgba(0, 0, 0, 0.12) 0px 0px 4px 0px, rgba(0, 0, 0, 0.24) 0px 4px 4px 0px;
+        transition: background 0.1s ease-in 0s;
+        background: rgb(0, 82, 255);
+        color: white;
+      }
+
+      .linkbutton-main:active,
+      .linkbutton-main:hover,
+      .linkbutton-main:focus {
+        text-decoration: underline;
+      }
+
+      .linkbutton-main:focus,
+      .linkbutton-main:hover {
+        transition: background 0.1s ease-in;
+        background: rgb(37, 104, 247);
+      }
+
+      .linkbutton-main:active {
+        background: rgb(47, 110, 246);
+      }
+
+      .linkbutton-main:focus {
+        border-radius: 4px;
+        box-shadow: rgb(0, 82, 255) 0px 0px 12px, rgb(0, 82, 255) 0px 0px 0px 1px;
+        outline: 1px;
+        transition: box-shadow 0.1s ease-in-out 0s;
+      }
+
+      .linkbutton-secondary {
+        display: inline-block;
+        user-select: none;
+        padding: 10px 26px;
+        border-radius: 6px;
+        font-family: Poppins;
+        font-weight: 500;
+        font-size: 16px;
+        text-decoration: none;
+        box-shadow: rgba(0, 0, 0, 0.12) 0px 0px 4px 0px, rgba(0, 0, 0, 0.24) 0px 4px 4px 0px;
+        transition: background 0.1s ease-in 0s;
+        background: white;
+        color: rgb(0, 82, 255);
+      }
+
+      .linkbutton-secondary:active,
+      .linkbutton-secondary:hover,
+      .linkbutton-secondary:focus {
+        text-decoration: underline;
+      }
+
+      .linkbutton-secondary:focus,
+      .linkbutton-secondary:hover {
+        transition: background 0.1s ease-in;
+        background: rgb(244, 246, 252);
+      }
+
+      .linkbutton-secondary:active {
+        background: rgb(221, 229, 250);
+      }
+
+      .linkbutton-secondary:focus {
+        border-radius: 4px;
+        box-shadow: rgb(0, 82, 255) 0px 0px 12px, rgb(0, 82, 255) 0px 0px 0px 1px;
+        outline: 1px;
+        transition: box-shadow 0.1s ease-in-out 0s;
+      }
+
+      .outline {
+        border: solid 1px rgb(0, 82, 255);
+        padding: 8px 26px;
+      }
+
+			body {
+				margin: 0;
+				padding: 0;
+				background: white;
+			}
+
+			main {
+        margin-top: 64px;
+			}
+
+      .card {
+        width: calc(100% - 80px);
+				margin-left: auto;
+				margin-right: auto;
+				box-shadow: rgb(0 0 0 / 12%) 0px 0px 4px 0px, rgb(0 0 0 / 24%) 0px 4px 4px 0px;
+				background: white;
+				border-radius: 10px;
+				margin-top: 20px;
+				padding-left: 40px;
+				padding-right: 40px;
+				padding-top: 20px;
+				padding-bottom: 20px;
+      }
+
+      .card p {
+        margin-top: 8px;
+        margin-bottom: 8px;
+      }
+      	
+      @media (max-width: 800px) {
+        .card {
+          width: calc(100% - 32px);
+          padding-left: 16px;
+          padding-right: 16px;
+        }
+      }
+
+			main h2 {
+				margin-bottom: 20px;
+			}
+
+			div p {
+				margin-bottom: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<Header user={user}/>
+
+		<main>
+      <slot/>
+		</main>
+
+    <Footer user={user}/>
+	</body>
+</html>

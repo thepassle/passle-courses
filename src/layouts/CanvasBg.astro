@@ -1,0 +1,48 @@
+---
+
+---
+<style>
+	.canvas-bg {
+		padding-left: 40px;
+		padding-right: 40px;
+		background: rgb(233, 233, 233);
+		height: calc(100vh - 64px);
+	}
+
+	.canvas-container {
+		padding-top:40px;
+		width: 45%;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	h1 {
+		font-size: 26px;
+	}
+
+	h1 ~ h1 {
+		margin-top: 30px;
+	}
+		
+	@media (max-width: 1200px) {
+		.canvas-container {
+			width: 75%;
+		}
+	}
+
+	@media (max-width: 800px) {
+		.canvas-container {
+			width: 100%;
+		}
+
+		.canvas-bg {
+			padding-left: 8px;
+			padding-right: 8px;
+		}
+	}
+</style>
+<div class="canvas-bg">
+	<div class="canvas-container">
+		<slot/>
+	</div>
+</div>

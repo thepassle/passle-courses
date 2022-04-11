@@ -1,0 +1,109 @@
+---
+import { isLoggedIn } from './utils/auth.js';
+import Main from '../layouts/Main.astro';
+import CanvasBg from '../layouts/CanvasBg.astro';
+
+const user = await isLoggedIn(Astro.request);
+if(!user.authed) {
+	return Astro.redirect('/');
+}
+---
+<style>
+	.settings-page-bg {
+		padding-left: 40px;
+		padding-right: 40px;
+		background: rgb(233, 233, 233);
+		height: calc(100vh - 64px);
+	}
+
+	.settings-container {
+		padding-top:40px;
+		width: 45%;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	h1 {
+		font-size: 26px;
+	}
+
+	h1 ~ h1 {
+		margin-top: 30px;
+	}
+
+	.row {
+		display: flex;
+	}
+
+	.row dt {
+		font-weight: 500;
+	}
+
+	.row dt {
+		flex-basis: 14%;
+	}
+
+	a.linkbutton-main {
+		margin-top: 40px;
+	}
+
+	.not-subscribed {
+		font-weight: 500;
+	}
+
+	@media (max-width: 1200px) {
+		.settings-container {
+			width: 75%;
+		}
+	}
+
+	@media (max-width: 800px) {
+		.settings-container {
+			width: 100%;
+		}
+
+		.settings-page-bg {
+			padding-left: 8px;
+			padding-right: 8px;
+		}
+
+		.row dt {
+			flex-basis: 20%;
+		}
+	}
+</style>
+
+<Main title="Settings" user={user}>
+	<CanvasBg>
+		<h1>Settings</h1>
+		<div class="card">
+			<dl>
+				<div class="row">
+					<dt>Name</dt>
+					<dd>{user.name}</dd>
+				</div>
+				<div class="row">
+					<dt>Email</dt>
+					<dd>{user.email}</dd>
+				</div>
+			</dl>
+		</div>
+		
+		<h1>Subscriptions</h1>
+		<div class="card">
+			{user.active 
+				? <div>
+						<h2>Subscription</h2>
+						<p>You are subscribed. Would you like to cancel?</p>
+						<a class="linkbutton-secondary outline" href="/mollie/cancel-subscription">Cancel</a>
+					</div>
+				: <div>
+					<p class="not-subscribed">You are not subscribed.</p>
+					<p>Would you like to subscribe?</p>
+					<a class="linkbutton-secondary outline" href="/sw/subscribe#register">Subscribe</a>
+				</div>
+			}
+		</div>
+		<a class="linkbutton-main" href="/auth/logout">Sign out</a>
+	</CanvasBg>
+</Main>

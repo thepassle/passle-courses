@@ -1,0 +1,53 @@
+---
+import fs from 'node:fs/promises';
+import { Markdown } from 'astro/components';
+import Header from '../../components/Header.astro';
+import Sidebar from '../../components/Sidebar.astro';
+import InteractiveExercise from '../../layouts/InteractiveExercise.astro';
+import Theory from '../../layouts/Theory.astro';
+
+import { isLoggedIn } from '../utils/auth.js';
+import { courseIndex } from './courseIndex.js';
+
+const user = await isLoggedIn(Astro.request);
+
+if(!user.authed) {
+  return Astro.redirect('/');
+}
+
+if(!user.active) {
+  return Astro.redirect('/sw/subscribe#register');
+}
+
+const index = parseInt(Astro.params.index);
+
+const lesson = courseIndex[index];
+
+if (!lesson) {
+  return Astro.redirect('/error?code="OUT_OF_BOUNDS')
+}
+
+let md = '';
+let validators = '';
+
+console.log(lesson);
+
+if(lesson.theory) {
+  md = await fs.readFile(new URL(lesson.markdownLocation, import.meta.url), 'utf-8');
+} else {
+  validators = lesson.validatorsLocation;
+}
+
+const next = courseIndex[index + 1];
+---
+{lesson.theory
+  ? <Theory title={lesson.title} isLast={!next} next={next?.title ?? ''} index={index}>
+      <Header slot="header" user={user}/>
+      <Sidebar slot="sidebar" index={index} courseIndex={courseIndex}/>
+      <Markdown slot="content" content={md} />
+    </Theory>
+  : <InteractiveExercise title={lesson.title} next={next?.title ?? ''} index={index} validator={validators}>
+      <Header slot="header" user={user}/>
+      <Sidebar slot="sidebar" index={index} courseIndex={courseIndex}/>
+    </InteractiveExercise>
+}

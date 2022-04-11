@@ -1,0 +1,129 @@
+---
+const { user } = Astro.props
+---
+<style>
+  header {
+    z-index: 9;
+    position: absolute;
+    top: 0;
+    width: calc(100% - 60px);
+    height: 64px;
+    border-bottom: 1px solid rgb(0 0 0 / 12%);
+    display: flex;
+    justify-content: space-between;
+    padding-left: 30px;
+    padding-right: 30px;
+    background: white;
+    align-items: center;
+    box-shadow: rgb(0 0 0 / 12%) 0px 0px 4px 0px, rgb(0 0 0 / 24%) 0px 4px 4px 0px;
+  }
+
+  header .passle {
+    font-weight: 800;
+    font-size: 26px;
+    color: black;
+    padding-left: 8px;
+    padding-right: 8px;
+    text-decoration: none;
+    transition: color .5s;
+  }
+
+  header .passle:visited {
+    color: black;
+  }
+
+  header .passle:hover,
+  header .passle:active,
+  header .passle:focus {
+    color: rgb(0, 82, 255);
+  }
+
+  header .authed {
+    display: flex;
+    align-items: center;
+    justify-content:center;
+  }
+
+  header .auth-link {
+    text-decoration: none;
+    border-radius: 6px;
+    padding: 8px 20px;  
+  }
+
+  header .auth-link:hover, 
+  header .auth-link:active, 
+  header .auth-link:focus {
+    text-decoration: underline;
+  }
+
+  header .auth-link:focus,
+  header .auth-link:hover {
+    transition: background 0.1s ease-in;
+    background: rgb(244, 246, 252);
+  }
+
+  header .auth-link:active {
+    background: rgb(221, 229, 250);
+  }
+
+  header .authed img {
+    border-radius: 50%;
+  }
+
+  header .authed .settings {
+    display: flex;
+    align-items: center;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-radius: 6px;
+  }
+
+  header .authed .settings {
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-right: 8px;
+    color: rgb(0, 82, 255);
+    font-weight: 500;
+  }
+
+  header .auth-link {
+    font-weight: 500;
+  }
+
+  header .authed .settings:focus,
+  header .authed .settings:hover {
+    transition: background 0.1s ease-in;
+    background: rgb(244, 246, 252);
+  }
+
+  header .authed .settings:active {
+    background: rgb(221, 229, 250);
+  }
+
+  header .auth-link:visited {
+    color: rgb(0, 82, 255);
+  }
+
+  @media(max-width: 800px) {
+    header .auth-link,
+    header .authed {
+      display: none;
+      border: solid 2px red;
+    }
+
+    header .passle {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+</style>
+<header>
+  <a class="passle" href="/">Passle Courses</a>
+  {user.authed
+    ? <div class="authed">
+        <a class="logout auth-link" href="/auth/logout">Logout</a>
+        <a class="settings" href="/settings" aria-label="Settings"><img referrerpolicy="no-referrer" alt="" width="40" height="40" src={user.picture}/></a>
+      </div>
+    : <a class="logout auth-link" href="/auth/login">Login</a>
+  }
+</header>

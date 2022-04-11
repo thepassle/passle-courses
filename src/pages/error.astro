@@ -1,0 +1,59 @@
+---
+import Main from '../layouts/Main.astro';
+import CanvasBg from '../layouts/CanvasBg.astro';
+
+import { isLoggedIn } from './utils/auth.js';
+const user = await isLoggedIn(Astro.request);
+
+const params = new URL(Astro.request.url);
+const error = params.searchParams.get('code');
+
+let errorMessage;
+switch(error) {
+	case 'AUTH':
+		errorMessage = 'User is not authenticated.';
+		break;
+	case 'SAVE_MOLLIE_ID_DB':
+		errorMessage = 'Failed to save mollie ID in the db.';
+		break;
+	case 'CREATE_MOLLIE_FAILED':
+		errorMessage = 'Failed to create a mollie user.';
+		break;
+	case 'CREATE_PAYMENT_FAILED':
+		errorMessage = 'Failed to create a mollie payment.';
+		break;
+	case 'CANCEL_FAILED':
+		errorMessage = 'Failed request to cancel subscription.';
+		break;
+	case 'CANCEL_DB_USER_SAVE_FAILED':
+		errorMessage = 'Failed to save user in db after cancelling subscription.';
+		break;
+	case 'FAILED_TO_FIND_USER':
+		errorMessage = 'Db request to find user failed.';
+		break;
+	case 'NO_DB_USER_FOUND':
+		errorMessage = 'Failed to find user in the db.';
+		break;
+	case 'INVALID_ACTIVATION_TOKEN':
+		errorMessage = 'Invalid activation token.';
+		break;
+	case 'DB_CON':
+		errorMessage = 'Failed to connect to the db.';
+		break;
+	case 'OUT_OF_BOUNDS':
+		errorMessage = 'Lesson does not exist.';
+		break;
+	default:
+		errorMessage = 'Something went wrong.';
+
+}
+
+---
+<Main title="Error" user={user}>
+	<CanvasBg>
+		<h1>Uh oh!</h1>
+		<div class="card">
+			<p>{errorMessage}</p>
+		</div>
+	</CanvasBg>
+</Main>

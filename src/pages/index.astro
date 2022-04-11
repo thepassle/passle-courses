@@ -1,0 +1,294 @@
+---
+import { isLoggedIn } from './utils/auth.js';
+import Main from '../layouts/Main.astro';
+import instructor from '../assets/instructor.png';
+import swcourse from '../assets/swcourse.png';
+import wccourse from '../assets/wccourse.png';
+
+const user = await isLoggedIn(Astro.request);
+---
+<style>
+  .section {
+    height: calc(100vh - 64px);
+		max-height: calc(900px - 64px);
+    border-bottom: solid lightgrey 1px;
+  }
+
+	.big-title {
+    text-align: center;
+    font-weight: 800;
+    font-size: 60px;
+    line-height: 58px;
+    padding-top: 40px;
+    padding-bottom: 60px;
+  }
+
+  @media (max-width: 800px) {
+		.big-title {
+			font-size: 35px;
+			line-height: 37px;
+			padding-top: 20px;
+			padding-bottom: 30px;
+		}
+	}
+
+	/**
+	 * COURSES
+	 */
+	 .courses .big-title {
+		 padding-bottom: 30px;
+	 }
+
+	.course-cards {
+		display: flex;
+		justify-content: center;
+	}
+
+	.course-cards .card-wrapper {
+		margin: 42px;
+		width: 350px;
+	}
+
+	.card-wrapper h2 {
+		margin-top: 24px;
+		text-align: center;
+	}
+
+	.course-cards .course-link {
+		margin: 0;
+		display: block;
+		background: white;
+		transform: scale(1);
+		transition: transform 0.1s ease-in;
+	}
+
+	.course-cards a:focus,
+	.course-cards a:hover {
+		transform: scale(1.05);
+
+		border-radius: 4px;
+		box-shadow: rgb(0, 82, 255) 0px 0px 12px, rgb(0, 82, 255) 0px 0px 0px 1px;
+		outline: 1px;
+	}
+
+	.course-cards .wc:focus,
+	.course-cards .wc:hover {
+		transform: scale(1.05);
+		border-radius: 10px;
+		box-shadow: rgb(0 0 0 / 12%) 0px 0px 4px 0px, rgb(0 0 0 / 24%) 0px 4px 4px 0px;
+		outline: 1px;
+	}
+
+	.course-card {
+		width: 350px;
+		height: 370px;
+		border-radius: 10px;
+		box-shadow: rgb(0 0 0 / 12%) 0px 0px 4px 0px, rgb(0 0 0 / 24%) 0px 4px 4px 0px;
+	}
+
+  @media (max-width: 800px) {
+		.courses {
+			height: auto;
+			max-height: none;
+			padding-bottom: 60px;
+		}
+
+		.course-cards {
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.course-card {
+			width: 250px;
+			height: 270px;
+		}
+
+		.course-cards .card-wrapper {
+			margin: 16px;
+			width: 250px;
+		}
+	}
+
+  /**
+	 * INSTRUCTOR
+	 */
+	.instructor {
+		height: auto;
+		padding-bottom: 80px;
+	}
+
+	.instructor .big-title {
+		padding-bottom: 60px;
+	}
+
+
+	.instructor-wrapper {
+		width: 60%;
+		margin-left: auto;
+		margin-right: auto;
+		display: flex;		
+	}
+
+	.instructor img {
+		border-radius: 50%;
+		width: 200px;
+		height: 200px;
+	}
+
+	.instructor-info {
+		flex: 1;
+		margin-left: 80px;
+	}
+
+	@media(max-width: 800px) {
+		.instructor-wrapper {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.instructor-info {
+			margin-top: 30px;
+			margin-left: 0;
+		}
+
+		.instructor .big-title {
+			padding-bottom: 30px;
+		}
+	}
+
+
+
+	/**
+	 * TESTIMONIALS
+	 */
+	.testimonials {
+		height: auto;
+		padding-top: 40px;
+		padding-bottom: 160px;
+	}
+
+	.testimonials h1 {
+
+	}
+
+	.testimonials ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+    justify-content: space-evenly;
+	}
+
+	.testimonials li {
+		box-shadow: rgb(0 0 0 / 12%) 0px 0px 4px 0px, rgb(0 0 0 / 24%) 0px 4px 4px 0px;
+    border-radius: 10px;
+		padding: 32px;
+		width: 250px;
+	}
+
+	.testimonials .author {
+		font-weight: 500;
+	}
+
+	.testimonials .quote {
+		font-size: 24px;
+	}
+
+	@media(max-width: 800px) {
+		.testimonials {
+			padding-top: 0px;
+			padding-bottom: 80px;
+		}
+
+		.testimonials ul {
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.testimonials li {
+			margin-bottom: 20px;
+		}
+	}
+
+</style>
+<Main user={user}>
+
+	<div class="section courses">
+		<h1 class="big-title">Courses</h1>
+		<div class="course-cards">
+			<div class="card-wrapper">
+				<a class="course-link sw" href={user?.active ? '/sw/0' : '/sw/subscribe'}>
+					<div class="course-card">
+						<img src={swcourse} alt=""/>
+					</div>
+				</a>
+				{user?.active
+					?	<h2>Start course</h2>
+					: <div>
+							<h2>The Mental Gymnastics<br/>of Service Worker</h2>
+							<p>Learn everything there is to know about Service Workers, and become a true master of offline first!</p>	
+						</div>
+				}
+			</div>
+			<div class="card-wrapper">
+				<div class="course-link wc" href="/sw/subscribe">
+					<div class="course-card">
+						<img src={wccourse} alt=""/>
+					</div>
+				</div>
+				{user?.active
+					?	<h2>Not available yet</h2>
+					: <div>
+							<h2>Web Components:<br/>From Zero to Hero</h2>
+							<p>Learn everything about the browser's native component model, from standalone components, to applications!</p>
+					</div>
+				}
+			</div>
+			
+		</div>
+	</div>
+
+	{!user?.active
+		? <div>
+				<div class="section testimonials">
+					<h1 class="big-title">Testimonials</h1>
+					<div class="testimonials-wrapper">
+						<ul>
+							<li>
+								<p class="quote">"This course has literally changed my life."</p>
+								<p class="author">— Barack Obama</p>
+							</li>
+							
+							<li>
+								<p class="quote">"Pascal is such a chad."</p>
+								<p class="author">— Arnold Schwarzenegger</p>
+							</li>
+
+							<li>
+								<p class="quote">"This is the best course I've ever seen."</p>
+								<p class="author">— Ludwig Ahgren</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="section instructor">
+					<h1 class="big-title">The instructor</h1>
+					<div class="instructor-wrapper">
+						<div class="instructor-image">
+							<img src={instructor} alt="Picture of the instructor, Pascal Schilp"/>
+						</div>
+						<div class="instructor-info">
+							<h2>Pascal Schilp</h2>
+							<p>It me. Ya boi. Pascal Schilp is a software developer based in the Netherlands, who currently works for ING.</p>
+							<p>In his free time, he enjoys hacking on hobby projects, playing phasmaphobia or PUBG and spending time with his partner.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		: ''
+	}
+
+</Main>

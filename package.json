@@ -1,0 +1,23 @@
+{
+  "name": "@example/minimal",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "devDependencies": {
+    "astro": "^1.0.0-beta.5",
+    "vite-plugin-commonjs": "^0.2.6"
+  },
+  "dependencies": {
+    "@astrojs/netlify": "^0.1.0",
+    "google-auth-library": "^7.14.1",
+    "jsonwebtoken": "^8.5.1",
+    "lightcookie": "^1.0.25",
+    "lit": "^2.2.2",
+    "mongoose": "^6.2.10",
+    "uuid": "^8.3.2"
+  }
+}

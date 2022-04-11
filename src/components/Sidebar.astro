@@ -1,0 +1,72 @@
+---
+const { index, courseIndex } = Astro.props;
+---
+<style>
+  *:focus {
+    border-radius: 4px;
+    box-shadow: rgb(0, 82, 255) 0px 0px 12px, rgb(0, 82, 255) 0px 0px 0px 1px;
+    outline: 1px;
+    transition: box-shadow 0.1s ease-in-out 0s;
+  }
+
+  .sidebar {
+    z-index: 3;
+    font-weight: 300;
+    width: 370px;
+    background: white;
+    box-shadow: rgb(0 0 0 / 12%) 0px 0px 4px 0px, rgb(0 0 0 / 24%) 0px 4px 4px 0px;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin-top: 20px;
+  }
+
+  li {
+    padding: 8px 30px;
+  }
+
+  .sidebar-link {
+    display: block;
+    text-decoration: none;
+    color: rgb(0, 82, 255);
+  }
+
+  .sidebar-link:hover,
+  .sidebar-link:focus{
+    text-decoration: underline;
+    background-color: #f5f5f5;
+  }
+
+  .sidebar-link:visited {
+    color: rgb(0, 82, 255);
+  }
+
+  .sidebar-link:hover {
+    background-color: #f5f5f5;
+  }
+
+  .current {
+    font-weight: 500;
+    background-color: #f5f5f5;
+    border-left: solid 5px rgb(0, 82, 255);
+  }
+</style>
+<div class="sidebar">
+  <ul>
+    {courseIndex.map((lesson, i) => {
+      const current = i === parseInt(index);
+
+      return i > parseInt(index) 
+        ? (<li>{lesson.title}</li>) 
+        : (<a class="sidebar-link" href={`/sw/${i}`}>
+            <li class={current && 'current'}>
+              {lesson.title}
+            </li>
+          </a>
+        )
+    })}
+  </ul>
+</div>

@@ -1,0 +1,195 @@
+---
+const { validator, index, next, title } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;800&display=swap" rel="stylesheet">
+  <base href="/">
+
+  <style is:global>
+    *:focus {
+      border-radius: 4px;
+      box-shadow: rgb(0, 82, 255) 0px 0px 12px, rgb(0, 82, 255) 0px 0px 0px 1px;
+      outline: 1px;
+      transition: box-shadow 0.1s ease-in-out 0s;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: rgb(233,233,233);
+      height: calc(100vh - 64px);
+    }
+
+    .master {
+      margin-top: 64px;
+      display: flex;
+      height: 100%;
+      width: 100%;
+    }
+
+    interactive-exercise {
+      height: 100%;
+      width: 100%;
+      display: flex;
+    }
+
+    #results,
+    #editor {
+      height: calc(100% - 80px);
+      
+      margin-top: 20px;
+      margin-bottom: 20px;
+      margin-left: 20px;
+      margin-right: 20px;
+
+      padding: 20px;
+      width: 50%;
+    }
+
+    #editor {
+      margin-right: 10px;
+      padding-left: 0;
+      overflow-y: clip;
+      box-shadow: rgb(0 0 0 / 12%) 0px 0px 4px 0px, rgb(0 0 0 / 24%) 0px 4px 4px 0px;
+      background: white;
+      border-radius: 10px;
+    }
+
+    #results {
+      margin-left: 10px;
+    }
+
+    #results {
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+    }
+
+    .result-list {
+      font-weight: 300;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      background: white;
+
+      box-shadow: rgb(0 0 0 / 12%) 0px 0px 4px 0px, rgb(0 0 0 / 24%) 0px 4px 4px 0px;
+      background: white;
+      border-radius: 10px;
+    }
+
+    .resources {
+      padding: 20px;
+      border-radius: 10px;
+      background: white;
+
+      box-shadow: rgb(0 0 0 / 12%) 0px 0px 4px 0px, rgb(0 0 0 / 24%) 0px 4px 4px 0px;
+      background: white;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .resources a {
+      font-weight: 300;
+      
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    ul {
+      font-weight: 300;
+      list-style: none;
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+
+
+    .next {
+      padding: 20px;
+
+      box-shadow: rgb(0 0 0 / 12%) 0px 0px 4px 0px, rgb(0 0 0 / 24%) 0px 4px 4px 0px;
+      background: white;
+      border-radius: 10px;
+    }
+
+    .next-anchor:visited .next {
+      color: black;
+      text-decoration: none;
+    }
+
+    .next-anchor {
+      color: black;
+      transition: transform 0.1s ease-in;
+      border-radius: 10px;
+      text-decoration: none;
+    }
+
+    .next-anchor:hover,
+    .next-anchor:focus {
+      transform: scale(1.02);
+      box-shadow: rgb(0, 82, 255) 0px 0px 12px, rgb(0, 82, 255) 0px 0px 0px 1px;
+    }
+
+    .next-header h1 {
+      margin-bottom: 0;
+    }
+
+    .next-header svg {
+      margin-right: 12px;
+    }
+
+    .next-anchor:hover .next-header,
+    .next-anchor:focus .next-header {
+      fill: rgb(0, 82, 225);
+      color: rgb(0, 82, 255);
+    }
+
+    .next-header {
+      align-items: center;
+      display: flex;
+    }
+    
+
+    .up-next {
+      font-weight: 300;
+      margin-bottom: 0;
+    }
+
+    .up-next-title {
+      margin-top: 0;
+    }
+  </style>
+  <title>{title}</title>
+  <link rel="stylesheet" href="./monaco-styles.css">
+</head>
+
+<body>
+  <script>
+    window.MonacoEnvironment = {
+      getWorkerUrl: function () {
+        return './ts.worker.js';
+      }
+    };
+  </script>
+  <slot name="header"></slot>
+  
+  <div class="master">
+    <slot name="sidebar"></slot>
+    <interactive-exercise next={next} index={index} validator={validator}></interactive-exercise>
+  </div>
+  <script type="module" src="./interactive-exercise.js"></script>
+</body>
+
+</html>

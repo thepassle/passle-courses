@@ -1,0 +1,81 @@
+---
+/**
+ * The webhook can't reach my local dev server, so here are some api calls to mock
+ * calling the webhook handler for local testing/dev/mocking.
+ */
+if(import.meta.env.ENV !== 'dev') {
+  return Astro.redirect('/');
+}
+---
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>Astro</title>
+	</head>
+	<body>
+    <a href="/">home</a>
+		<h1>Test mollie webhook</h1>
+    <button id="paidFirst">paid, first</button>
+    <button id="canceledFirst">canceled, first</button>
+    <button id="failedFirst">failed, first</button>
+    <br/>
+    <button id="paidRec">paid, recurring</button>
+    <button id="canceledRec">canceled, recurring</button>
+    <button id="failedRec">failed, recurring</button>
+    <script>
+      function post(opts) {
+        fetch('/mollie/webhook', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            id: 'tr_rU2tQ5GcTB',
+            mock: true,
+            ...opts,
+          })
+        });
+      }
+
+      paidFirst.addEventListener('click', () => {
+        post({
+          status: 'paid',
+          sequenceType: 'first'
+        });
+      });
+      canceledFirst.addEventListener('click', () => {
+        post({
+          status: 'canceled',
+          sequenceType: 'first'
+        });     
+     });
+      failedFirst.addEventListener('click', () => {
+        post({
+          status: 'failed',
+          sequenceType: 'first'
+        });
+      });
+
+
+      paidRec.addEventListener('click', () => {
+        post({
+          status: 'paid',
+          sequenceType: 'recurring'
+        });
+      });
+      canceledRec.addEventListener('click', () => {
+        post({
+          status: 'canceled',
+          sequenceType: 'recurring'
+        });
+      });
+      failedRec.addEventListener('click', () => {
+        post({
+          status: 'failed',
+          sequenceType: 'recurring'
+        });
+      });
+    </script>
+	</body>
+</html>

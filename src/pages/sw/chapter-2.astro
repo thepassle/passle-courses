@@ -1,0 +1,14 @@
+---
+import { isLoggedIn } from '../utils/auth.js';
+import Main from '../../layouts/Main.astro';
+
+const user = await isLoggedIn(Astro.request);
+
+---
+<style>
+  
+</style>
+<script type="module" src="./my-component.js"></script>
+<Main>
+  <my-component></my-component>
+</Main>

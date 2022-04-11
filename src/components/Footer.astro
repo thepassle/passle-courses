@@ -1,0 +1,179 @@
+---
+import twitter from '../assets/twitter.svg';
+import github from '../assets/github.svg';
+
+const { user = { authed: true } } = Astro.props;
+---
+<style>
+  footer {
+    /* height: calc(50vh - 40px); */
+    background: rgb(244, 246, 252);
+    padding-top: 100px;
+    padding-bottom: 60px;
+  }
+
+  .footer-card {
+    width: calc(60% - 80px);
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: rgb(0 0 0 / 12%) 0px 0px 4px 0px, rgb(0 0 0 / 24%) 0px 4px 4px 0px;
+    background: white;
+    border-radius: 10px;
+
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .footer-card p {
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  .social-icon-links {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+  }
+
+  .social-icon-link {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    border-radius: 6px;
+  }
+
+  .social-icon-link:focus,
+  .social-icon-link:hover {
+    transition: background 0.1s ease-in;
+    background: rgb(244, 246, 252);
+  }
+
+  .social-icon-link:active {
+    background: rgb(221, 229, 250);
+  }
+    
+  @media (max-width: 800px) {
+    .card {
+      width: calc(100% - 32px);
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+  }
+
+  nav {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .links {
+    list-style: none;
+    display: flex;
+  }
+
+  .links li a {
+    padding-left: 8px;
+    padding-right: 8px;
+    color: rgb(0,82,255);
+  }
+
+  .links a:visited {
+    color: rgb(0,82,255);
+  }
+
+  h2 {
+    font-weight: 800;
+    text-align: center;
+  }
+
+  .footer-card p {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  .logout {
+    display: none;
+  }
+
+  @media (max-width: 800px) {
+    .footer-card {
+      width: calc(100% - 64px);
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    .logout {
+      margin-top: 40px;
+      margin-left: auto;
+      margin-right: auto;
+      width: calc(100% - 64px);
+      padding-left: 16px;
+      padding-right: 16px;
+      display: block;
+      text-align: center;
+
+    }
+
+    nav {
+      width: 100%;
+      flex-direction: column;
+    }
+
+    nav .links {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    nav .links li {
+      margin-bottom: 10px;
+    }
+
+    nav p {
+      text-align: center;
+      margin-top: 30px;
+    }
+  }
+
+</style>
+<footer>
+  
+  <div class="footer-card">
+    <h2>Passle Courses</h2>
+    <p>🚀 Built with Astro SSR</p>
+    <ul class="social-icon-links">
+      <li>
+        <a class="social-icon-link" aria-label="twitter" href="https://twitter.com/passle_">
+          <img src={twitter} alt="" />
+        </a>
+      </li>
+      <li>
+        <a class="social-icon-link" aria-label="github" href="https://www.github.com/thepassle_">
+          <img src={github} alt="" />
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  {user.authed
+    ? <a class="logout linkbutton-secondary outline" href="/auth/logout">Sign out</a>
+    : ''
+  }
+
+  <nav>
+    <ul class="links">
+      <li><a href="https://twitter.com/passle_">Twitter</a></li>
+      <li><a href="/blog">Blog</a></li>
+      <li><a href="mailto:pascalschilp@gmail.com">Contact</a></li>
+    </ul>
+    <p>© 2022 Pascal Schilp</p>
+  </nav>
+</footer>
