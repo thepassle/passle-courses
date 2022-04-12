@@ -211,7 +211,7 @@ In order to build this course selling website, I used the following technologies
 
 ### Homepage
 
-![homepage](https://imgur.com/w67qFG0.gif)
+![homepage](./blog/homepage.gif)
 
 ### Authentication
 
