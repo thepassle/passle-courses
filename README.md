@@ -148,6 +148,26 @@ As mentioned above, the first argument that gets passed to your route handlers a
 export function get(_, request) {}
 ```
 
+Another point of feedback: If you have an `.env` file in your project, you can access them in your astro files by using `import.meta.env`. This only seems to work for code that gets executed on the server, however. It doesnt seem to work for code that gets executed in the browser, for example, it would have been nice to have been able to make use of those env variables for initializing the Sign In With Google button:
+
+```jsx
+---
+// some frontmatter etc
+---
+<html>
+  <body>
+    <script>
+      google.accounts.id.initialize({ 
+        // wont work :(
+				client_id: import.meta.env.GOOGLE_CLIENT_ID, 
+				login_uri: `${import.meta.env.APP_URL}/auth/success`
+				ux_mode: "redirect", 
+			});
+    </script>
+  </body>
+</html> 
+```
+
 ### Redirect with error message
 
 In some of my route handlers, I have to handle quite some error cases. Instinctively, I tried to do something like:
