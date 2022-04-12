@@ -10,7 +10,7 @@ Whew, it's been a hot minute since I blogged.
 
 I'd played around some with Astro in it's early beginnings, and sadly I could never quite find another excuse to build something with it. Not until recently, when the Astro team [released](https://astro.build/blog/experimental-server-side-rendering/) their new _SSR_ mode. It seemed like a good time to give Astro another spin, and before I knew, I'd built half a course selling website. So in this blog, I'll tell you all about it.
 
-![demo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/m5osy1mzjmd4xpweozij.gif)
+![demo](https://imgur.com/6ynV5ys.gif)
 
 ## Getting started
 
@@ -211,11 +211,11 @@ In order to build this course selling website, I used the following technologies
 
 ### Homepage
 
-![homepage](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ef6uysytaahra2c9nq03.gif)
+![homepage](https://imgur.com/w67qFG0.gif)
 
 ### Authentication
 
-![Authentication](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/8tfuho3svlbn25dqo8p3.gif)
+![Authentication](https://imgur.com/lNwIfTW.gif)
 
 For authentication I used [google-auth-library](https://www.npmjs.com/search?q=google-auth-library) which was a massive pain to work with, find any information about, and use. However, once I finally had my authentication set up, I was able to add some nice handling for my protected pages. For example, I only want authenticated users, and users that have an active subscription to be able to access the course material.
 
@@ -237,7 +237,7 @@ if(!authed && !active) {
 
 ### Subscribing
 
-![subscribing](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ozr81jyr7r03qyrv8lm6.gif)
+![subscribing](https://imgur.com/vTdLVDe.gif)
 
 For subscriptions, I used [Mollie](https://mollie.com) as a payment processor. First of all, it has to be said that Mollie's API documentation is ridiculously good. I used the [Mollie API](https://docs.mollie.com/reference/v2/payments-api/create-payment) to create a payment, and then used [Mollie webhooks](https://docs.mollie.com/guides/webhooks) to handle the payment status updates. I also used webhooks to the handle recurring payments. Their super clear documentation made implementing this a _breeze_.
 
@@ -306,7 +306,7 @@ if (import.meta.env.ENV === 'dev' && body?.mock) {
 
 ### Unsubscribe
 
-![unsub](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/vdmcrafgw1i5v4fymfj7.gif)
+![unsub](https://imgur.com/ZK6Eee6.gif)
 
 ### Course content
 
