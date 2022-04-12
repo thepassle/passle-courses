@@ -8,7 +8,13 @@ cover_image: https://imgur.com/lVh86dZ.png
 
 Whew, it's been a hot minute since I blogged. 
 
-I'd played around some with Astro in it's early beginnings, and sadly I could never quite find another excuse to build something with it. Not until recently, when the Astro team [released](https://astro.build/blog/experimental-server-side-rendering/) their new _SSR_ mode. It seemed like a good time to give Astro another spin, and before I knew, I'd built half a course selling website. So in this blog, I'll tell you all about it.
+I'd played around some with Astro in it's early beginnings, and sadly I could never quite find another excuse to build something with it. Not until recently, when the Astro team [released](https://astro.build/blog/experimental-server-side-rendering/) their new _SSR_ mode. It seemed like a good time to give Astro another spin, and before I knew, I'd built half a course selling website. 
+
+In this blog I'll go over: 
+- a short introduction to Astro SSR
+- my personal experience building a real application with Astro SSR 
+- some of the issues I encountered in hopes of providing feedback for the official release
+- a showcase of the application I built
 
 ![demo](./blog/demo2.gif)
 
@@ -28,7 +34,7 @@ I started my project by running `npm init astro@latest`. Being myself a fan of m
 
 > Hell yeah.
 
-As promised, the `Minimal` starter gave me a super nice and clean project structure to get started with. Alright, now onto... What, exactly? Having little experience with Astro, and not being quite sure how one does a SSR, I figured I'd checkout some documentation. At the time of the release, not much documentation was available. There was the [announcement blog](https://astro.build/blog/experimental-server-side-rendering/), a _very_ brief [documentation page](https://docs.astro.build/en/guides/server-side-rendering/), and a [Netlify blog](https://www.netlify.com/blog/astro-ssr/). With such little documentation being available, I figured I'd follow the Netlify blog, because it seemed straight forward enough to follow, and I've used Netlify very happily in the past.
+As promised, the `Minimal` starter gave me a super nice and clean project structure to get started with. Alright, now onto... What, exactly? Having little experience with Astro, and not being quite sure how one does a SSR, I figured I'd checkout some documentation. At the time of the release, not much documentation was available. There was the [announcement blog](https://astro.build/blog/experimental-server-side-rendering/), a _very_ brief [documentation page](https://docs.astro.build/en/guides/server-side-rendering/), and a [Netlify blog](https://www.netlify.com/blog/astro-ssr/). Slim pickings, so I figured I'd follow the Netlify blog, because it seemed straight forward enough to follow, and I've used Netlify very happily in the past.
 
 As instructed, I installed the required dependencies:
 
@@ -58,7 +64,9 @@ Ran into an error.
 
 ## The pain of the bleeding edge
 
-To be fair, I'm told this is already fixed in a more recent version, and these kind of issues are to be expected when you're trying out the bleeding edge, and working with new things. The Netlify blog was missing this information, but apparently you're supposed to configure your `site` property in the `astro.config.mjs`, e.g.:
+Ah, the pain of being on the bleeding edge. When trying out beta versions of projects, it's only natural to run into some issues here and there; in fact, its the entire point. Projects are able to gather valuable feedback from the community and catch issues early, and for users it's a great way to learn about new features. During the course of this project I ran into several issues, that will hopefully constructively contribute to the official stable release. 
+
+In the case of the `Invalid URL`; the Netlify blog failed to mention it, but apparently you're supposed to configure your `site` property in the `astro.config.mjs`, e.g.:
 
 ```diff
 import { defineConfig } from 'astro/config';
@@ -70,17 +78,27 @@ export default defineConfig({
 });
 ```
 
+This was not straightforward to me, because at the time of scaffolding the project, I did not have a site yet; I'd barely started building it! Fortunately, the error message has since been made more user friendly.
+
+### Too many cookies are bad for you
+
 Another small issue I ran into, when trying to set multiple cookies, is that only one seemed to make it to the browser for some reason. 
 
 Fortunately, the [Astro discord](https://astro.build/chat) has a very lively community where even core team members are around to help, so I created a [Github issue](https://github.com/withastro/astro/issues/3024), and the issue was very quickly resolved and released. (Thanks, Matthew!)
 
-Even later on in the project, I discovered another bug when trying to render a custom element, e.g.: `<my-el></my-el>` would always render `<my-el>undefined</my-el>` in the browser, wether the custom element was upgraded or not. I created an issue for this problem [here](https://github.com/withastro/astro/issues/3070). Fortunately I was able to work around this with a super hacky solution 😄
+### Custom elements always render undefined
+
+Later on in the project, I discovered another bug when trying to render a custom element, e.g.: `<my-el></my-el>` would always render `<my-el>undefined</my-el>` in the browser, wether the custom element was upgraded or not. I created an issue for this problem [here](https://github.com/withastro/astro/issues/3070). Fortunately I was able to work around this with a super hacky solution 😄
 
 ```js
 connectedCallback() {
   this.innerHTML = '';
 }
 ```
+
+### Request body unavailable after deploy
+
+Another slightly more painful issue that I ran into, was that I found my request bodies to be unavailable _only_ after building and deploying to Netlify. This is a problem, because my authentication and other routes depend on redirect URIs being able to handle data in the request bodies. I again created another [Github issue](https://github.com/withastro/astro/issues/3085), with a small reproduction.
 
 
 ## SSR it up
@@ -141,12 +159,16 @@ export function get() {
 
 ## Feedback
 
+### Unused route params
+
 As mentioned above, the first argument that gets passed to your route handlers are the route params. However, if you're not using route params, it will be undefined. In my project, I've had to build quite a few route handlers, and I found I used the route param very rarely, which then kind of makes for an awkward function signature:
 
 ```js
 // Always have to ignore the first arg :(
 export function get(_, request) {}
 ```
+
+### Environment variables
 
 Another point of feedback: If you have an `.env` file in your project, you can access them in your astro files by using `import.meta.env`. This only seems to work for code that gets executed on the server, however. It doesnt seem to work for code that gets executed in the browser, for example, it would have been nice to have been able to make use of those env variables for initializing the Sign In With Google button:
 
@@ -217,7 +239,7 @@ export function get() {
 }
 ```
 
-## Course Selling Application
+## App Showcase: Course Selling Site
 
 Alright, enough technicality, let's take a look at the course selling website I built using Astro SSR. I've been wanting to find a nice way to create and sell some online courses, and I've been lowkey looking for a way to start doing this. This has been something thats been in the background of my mind for a while now, and Astro SSR seemed like a nice excuse for me to take some time to dive into this.
 
@@ -228,6 +250,12 @@ In order to build this course selling website, I used the following technologies
 - [Astro SSR](https://www.npmjs.com/package/astro), ofcourse
 - [Lit](https://www.npmjs.com/package/lit) as the component host, [monaco-editor](https://www.npmjs.com/package/monaco-editor) for the interactive exercise editor in the frontend, and [typescript](https://www.npmjs.com/package/typescript) for syntax analysis
 - [Netlify](https://netlify.com/) for hosting/deployment
+
+At the same time, this would be a cool project to show off Astro SSRs features, such as:
+- Dynamic routes
+- Authentication
+- Route handling
+- Redirections
 
 ### Homepage
 
@@ -359,7 +387,7 @@ if (!lesson) {
 ---
 ```
 
-I make sure the user is authenticated, and has an active subscription. And then I use the route params to dynamically load the corresponding content page: either `<Theory/>` or `<InteractiveExercise/>`. I also pass along some additional information about the current lesson, like a `title`, but also some information about the _next_ lesson.
+I make sure the user is authenticated, and has an active subscription. Then I use the route params to dynamically load the corresponding content page: either `<Theory/>` containing some markdown or an `<InteractiveExercise/>`. I also pass along some additional information about the current lesson, like a `title`, but also some information about the _next_ lesson.
 
 ![demo](./blog/demo.gif)
 
@@ -367,16 +395,14 @@ The interactive exercises use Typescript to create an AST of the code that gets 
 
 ```js
 function isServiceWorkerRegisterCall(ts, node) {
-  if (ts.isCallExpression(node)) {
-    if (ts.isPropertyAccessExpression(node.expression)) {
-      if (
-        node?.expression?.expression?.expression?.getText?.() === 'navigator' && 
-        node?.expression?.expression?.name?.getText?.() === 'serviceWorker') {
-        if (node?.expression?.name?.getText?.() === 'register') {
-          return true;
-        }
-      }
-    }
+  if (
+    ts.isCallExpression(node) &&
+    ts.isPropertyAccessExpression(node.expression) &&
+    node?.expression?.expression?.expression?.getText?.() === 'navigator' && 
+    node?.expression?.expression?.name?.getText?.() === 'serviceWorker' &&
+    node?.expression?.name?.getText?.() === 'register'
+  ) {
+    return true;
   }
   return false;
 }
@@ -451,7 +477,9 @@ self.addEventListener('fetch', function (event) {
 
 ## Conclusion
 
-Working with Astro SSR has a been a blast. Being mostly a frontend developer, it was nice to get out of my comfort zone a little bit and do more server-side work. As an added nice result, I found that I barely ended up using any client side JS for the most part of the site, but just HTML and CSS. Obviously the interactive editor uses some client side JS, but thats only a small part of the application. Additionally, Astro SSR was very straightforward to pick up, start using, and be productive with. Would absolutely recommend.
+Working with Astro SSR has a been a blast. Being mostly a frontend developer, it was nice to get out of my comfort zone a little bit and do more server-side work. As an added nice result, I found that I barely ended up using any client side JS for the most part of the site, but just HTML and CSS. Obviously the interactive editor uses some client side JS, but thats only a small part of the application. Additionally, Astro SSR was very straightforward to pick up, start using, and be productive with. Before I realized it, I had half the course selling site put together, and I'm really glad that I did. 
+
+Currently the project is a **minimum** viable product, and all the features (like recurring payments, etc) are actually functional — not 'faked', but I'll be working more on it over time to polish it, improve styling, and add more features. Trying out Astro SSR was just the push I needed to get started on building it, however.
 
 ## Astro 1.0 Hackathon
 

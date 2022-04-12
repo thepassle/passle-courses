@@ -1,14 +1,12 @@
 function isServiceWorkerRegisterCall(ts, node) {
-  if (ts.isCallExpression(node)) {
-    if (ts.isPropertyAccessExpression(node.expression)) {
-      if (
-        node?.expression?.expression?.expression?.getText?.() === 'navigator' && 
-        node?.expression?.expression?.name?.getText?.() === 'serviceWorker') {
-        if (node?.expression?.name?.getText?.() === 'register') {
-          return true;
-        }
-      }
-    }
+  if (
+    ts.isCallExpression(node) &&
+    ts.isPropertyAccessExpression(node.expression) &&
+    node?.expression?.expression?.expression?.getText?.() === 'navigator' && 
+    node?.expression?.expression?.name?.getText?.() === 'serviceWorker' &&
+    node?.expression?.name?.getText?.() === 'register'
+  ) {
+    return true;
   }
   return false;
 }
