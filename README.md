@@ -10,7 +10,7 @@ Whew, it's been a hot minute since I blogged.
 
 I'd played around some with Astro in it's early beginnings, and sadly I could never quite find another excuse to build something with it. Not until recently, when the Astro team [released](https://astro.build/blog/experimental-server-side-rendering/) their new _SSR_ mode. It seemed like a good time to give Astro another spin, and before I knew, I'd built half a course selling website. So in this blog, I'll tell you all about it.
 
-![demo](https://imgur.com/6ynV5ys.gif)
+![demo](./blog/demo2.gif)
 
 ## Getting started
 
@@ -169,7 +169,7 @@ export function get() {
 
 Not by the fault of Astro, but rather the HTTP spec, this won't work. After discussing how to handle this situation gracefully on the Astro discord, Matthew suggested perhaps introducing `Astro.flash`:
 
-![flash](https://imgur.com/zOJOljK.png)
+![flash](./blog/astroflash.png)
 
 For the time being, I implemented my error redirections like this:
 
@@ -215,7 +215,7 @@ In order to build this course selling website, I used the following technologies
 
 ### Authentication
 
-![Authentication](https://imgur.com/lNwIfTW.gif)
+![Authentication](./blog/authentication.gif)
 
 For authentication I used [google-auth-library](https://www.npmjs.com/search?q=google-auth-library) which was a massive pain to work with, find any information about, and use. However, once I finally had my authentication set up, I was able to add some nice handling for my protected pages. For example, I only want authenticated users, and users that have an active subscription to be able to access the course material.
 
@@ -237,7 +237,7 @@ if(!authed && !active) {
 
 ### Subscribing
 
-![subscribing](https://imgur.com/vTdLVDe.gif)
+![subscribing](./blog/subscribe555.gif)
 
 For subscriptions, I used [Mollie](https://mollie.com) as a payment processor. First of all, it has to be said that Mollie's API documentation is ridiculously good. I used the [Mollie API](https://docs.mollie.com/reference/v2/payments-api/create-payment) to create a payment, and then used [Mollie webhooks](https://docs.mollie.com/guides/webhooks) to handle the payment status updates. I also used webhooks to the handle recurring payments. Their super clear documentation made implementing this a _breeze_.
 
@@ -278,7 +278,7 @@ If the `ActivationToken` is valid, I can now activate the subscription on the us
 
 ### Testing webhooks
 
-![webhooks](https://imgur.com/DfCi2gz.png)
+![webhooks](./blog/molliewebhooks.png)
 
 As a fun little aside, Mollie's server naturally isn't able to send requests to my webhook handler when I'm running my application locally. So to work around this I hacked together a little mock API page that posts messages to my webhook handler, that I can then use to mock any requests and overwrite the transaction:
 
@@ -306,7 +306,7 @@ if (import.meta.env.ENV === 'dev' && body?.mock) {
 
 ### Unsubscribe
 
-![unsub](https://imgur.com/ZK6Eee6.gif)
+![unsub](./blog/unsubscribe.gif)
 
 ### Course content
 
@@ -341,7 +341,7 @@ if (!lesson) {
 
 I make sure the user is authenticated, and has an active subscription. And then I use the route params to dynamically load the corresponding content page: either `<Theory/>` or `<InteractiveExercise/>`. I also pass along some additional information about the current lesson, like a `title`, but also some information about the _next_ lesson.
 
-![demo](https://imgur.com/BV6nNEy.gif)
+![demo](./blog/demo.gif)
 
 The interactive exercises use Typescript to create an AST of the code that gets input by the user, and then I do some static analysis on the code to verify wether or not the user has completed all the tasks in the exercise:
 
