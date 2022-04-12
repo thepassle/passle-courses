@@ -226,7 +226,7 @@ In order to build this course selling website, I used the following technologies
 - A free tier MongoDB on [CleverCloud](clever-cloud.com), that I interface with [mongoose](https://www.npmjs.com/package/mongoose)
 - [Mollie Payments](https://mollie.com/) for handling subscriptions and (recurring) payments
 - [Astro SSR](https://www.npmjs.com/package/astro), ofcourse
-- [Lit](https://www.npmjs.com/package/lit) and [monaco-editor](https://www.npmjs.com/package/monaco-editor) for the interactive exercise editor in the frontend
+- [Lit](https://www.npmjs.com/package/lit) as the component host, [monaco-editor](https://www.npmjs.com/package/monaco-editor) for the interactive exercise editor in the frontend, and [typescript](https://www.npmjs.com/package/typescript) for syntax analysis
 - [Netlify](https://netlify.com/) for hosting/deployment
 
 ### Homepage
@@ -330,7 +330,7 @@ if (import.meta.env.ENV === 'dev' && body?.mock) {
 
 ### Course content
 
-The course content consists of two different parts: theory, and interactive exercises. For the interactive exercises, I used [Lit](https://www.npmjs.com/package/lit) and [monaco-editor](https://www.npmjs.com/package/monaco-editor). Arguably, I didnt really need Lit for this part, but I'm productive with it, so it was the easy choice.
+The course content consists of two different parts: theory, and interactive exercises. For the interactive exercises, I used [Lit](https://www.npmjs.com/package/lit), [monaco-editor](https://www.npmjs.com/package/monaco-editor) and [typescript](https://www.npmjs.com/package/typescript). Arguably, I didnt really need Lit for this part, but I'm productive with it, so it was the easy choice.
 
 The way I load the course content again makes nice usage of Astro SSR's dynamic routing:
 
@@ -398,6 +398,55 @@ export const validators = [
     }
   }
 ]
+```
+
+
+Since `monaco-editor` and `typescript` (even when bundled) are fairly large files, I also whipped up a simple service worker to cache these large files, and make sure performance stays good:
+
+```js
+const VERSION = 1;
+const CACHENAME = `passle-courses-v${VERSION}`;
+
+self.addEventListener('install', () => {
+  return self.skipWaiting();
+});
+
+self.addEventListener('activate', () => {
+  return clients.claim();
+});
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHENAME).then((cache) => {
+      return cache.addAll([
+        './monaco-editor.js',
+        './ts.worker.js',
+        './typescript.js',
+      ]);
+    })
+  );
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames
+          .filter(cacheName => cacheName.startsWith('passle-courses-') && cacheName !== CACHENAME)
+          .map(cacheName => caches.delete(cacheName))
+      )
+    })
+  )
+});
+
+self.addEventListener('fetch', function (event) {
+  event.respondWith(
+    caches.match(event.request).then(function (response) {
+      return response || fetch(event.request);
+    }),
+  );
+});
+
 ```
 
 ## Conclusion
