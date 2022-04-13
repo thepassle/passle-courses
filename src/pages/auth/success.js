@@ -6,6 +6,13 @@ import { createToken, createHeaders } from '../utils/auth.js';
 const CLIENT_ID=import.meta.env.SIGN_IN_WITH_GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(CLIENT_ID);
 
+export function get() {
+  return new Response(JSON.stringify({foo: 'bar'}), {
+    status: 200,
+
+  });
+}
+
 export async function post(_, req) {
   const body = await req.text();
   const params = new URLSearchParams(body);
@@ -19,6 +26,7 @@ export async function post(_, req) {
 
   /** Find user, or create one if its a new sign in */
   await mongoose.connect(import.meta.env.MONGODB_ADDON_URI);
+
   const user = await User.findOneOrCreate(
     {
       id: payload.sub
@@ -31,13 +39,13 @@ export async function post(_, req) {
       subscriptionActive: false,
     }
   );
-
+  
   const active = !!user?.subscriptionActive;
-
+  
   const jwt = createToken({ ...payload, id: payload.sub, active });
 
   /** Set headers */
-  const headers = createHeaders({active, jwt, location: '/'});
+  const headers = createHeaders({jwt, location: '/'});
 
   return new Response(null, {
     status: 302,

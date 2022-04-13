@@ -66,7 +66,7 @@ const user = await isLoggedIn(Astro.request);
 	.course-cards a:hover {
 		transform: scale(1.05);
 
-		border-radius: 4px;
+		border-radius: 10px;
 		box-shadow: rgb(0, 82, 255) 0px 0px 12px, rgb(0, 82, 255) 0px 0px 0px 1px;
 		outline: 1px;
 	}
@@ -80,10 +80,16 @@ const user = await isLoggedIn(Astro.request);
 	}
 
 	.course-card {
+		overflow: hidden;
 		width: 350px;
 		height: 370px;
 		border-radius: 10px;
 		box-shadow: rgb(0 0 0 / 12%) 0px 0px 4px 0px, rgb(0 0 0 / 24%) 0px 4px 4px 0px;
+	}
+
+	.course-card img {
+		object-fit: cover;
+		height: 100%;
 	}
 
   @media (max-width: 800px) {
@@ -219,7 +225,7 @@ const user = await isLoggedIn(Astro.request);
 		<h1 class="big-title">Courses</h1>
 		<div class="course-cards">
 			<div class="card-wrapper">
-				<a class="course-link sw" href={user?.active ? '/sw/0' : '/sw/subscribe'}>
+				<a class="course-link sw" href={user?.active ? '/sw/chapter/0/lesson/0' : '/sw/subscribe'}>
 					<div class="course-card">
 						<img src={swcourse} alt=""/>
 					</div>

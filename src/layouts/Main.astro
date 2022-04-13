@@ -7,6 +7,7 @@ const { title = 'Passle Courses', user = {authed: false} } = Astro.props;
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
+    <meta name="google-site-verification" content="xha97nsr2kN1ULeHUIQ80B7P3Gz0jN9F8hkqcsL7Z0A" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -164,5 +165,16 @@ const { title = 'Passle Courses', user = {authed: false} } = Astro.props;
 		</main>
 
     <Footer user={user}/>
+    <script>
+      // if('serviceWorker' in navigator) {
+      //   navigator.serviceWorker.register('./sw.js')
+      //     .then(() => {
+      //       console.log('sw registered');
+      //     })
+      //     .catch(() => {
+      //       console.log('failed to register sw');
+      //     });
+      // }
+    </script>
 	</body>
 </html>

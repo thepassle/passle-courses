@@ -20,6 +20,20 @@ const user = await isLoggedIn(Astro.request);
 			}
 		</div>
 
-		<script>window.onload=function(){google.accounts.id.initialize({client_id:"120459150147-600c7qgmmfdv41j8dm4iifrmpar2bqgc.apps.googleusercontent.com",ux_mode:"redirect",login_uri:"https://my-astro-course.netlify.app/auth/success"}),google.accounts.id.renderButton(document.getElementById("buttonDiv"),{type: 'button', theme:"filled_blue",size:"large"})};</script>
+		<script>
+		window.onload = function () { 
+			google.accounts.id.initialize({ 
+				client_id: '120459150147-600c7qgmmfdv41j8dm4iifrmpar2bqgc.apps.googleusercontent.com', 
+				ux_mode: "redirect", 
+				login_uri: 'https://my-astro-course.netlify.app/auth/success'
+			});
+
+			google.accounts.id.renderButton(
+				document.getElementById("buttonDiv"), 
+				{ type: 'button', theme: "filled_blue", size: "large" 
+			}) 
+		};
+
+		</script>
 	</CanvasBg>
 </Main>

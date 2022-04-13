@@ -16,7 +16,7 @@ In this blog I'll go over:
 - some of the issues I encountered in hopes of providing feedback for the official release
 - a showcase of the application I built
 
-![demo](./blog/demo2.gif)
+![demo](./blog/new_demo_overview.gif)
 
 ## Getting started
 
@@ -360,36 +360,22 @@ if (import.meta.env.ENV === 'dev' && body?.mock) {
 
 The course content consists of two different parts: theory, and interactive exercises. For the interactive exercises, I used [Lit](https://www.npmjs.com/package/lit), [monaco-editor](https://www.npmjs.com/package/monaco-editor) and [typescript](https://www.npmjs.com/package/typescript). Arguably, I didnt really need Lit for this part, but I'm productive with it, so it was the easy choice.
 
-The way I load the course content again makes nice usage of Astro SSR's dynamic routing:
+The way I load the course content again makes nice usage of Astro SSR's dynamic routing, and I was even surprised to learn that we have access to new features like [URLPattern](https://web.dev/urlpattern/) in Astro! Using the following structure: `/sw/[...i]/index.astro` (note the `...`) will essentially act as a catch-all, and will match any request under `/sw/`, so `/sw/foo` but also `/sw/foo/bar`.
 
-`/sw/[index].astro`:
-```jsx
----
-const user = await isLoggedIn(Astro.request);
+I can then use a `URLPattern` to extract the `chapter` and the `lesson`:
 
-if(!user.authed) {
-  return Astro.redirect('/');
-}
+`/sw/[...i]/index.astro`:
+```js
+const urlPattern = new URLPattern({pathname: '/sw/chapter/:chapter/lesson/:lesson'});
+const match = urlPattern.exec(new URL(Astro.request.url));
+const { chapter, lesson } = match.pathname.groups;
 
-if(!user.active) {
-  return Astro.redirect('/sw/subscribe#register');
-}
-
-const index = parseInt(Astro.params.index);
-const lesson = courseIndex[index];
-const nextLesson = courseIndex[index + 1];
-
-if (!lesson) {
-  return Astro.redirect('/error?code="OUT_OF_BOUNDS')
-}
-
-// etc
----
+const currentLesson = courseIndex[chapter].lessons[lesson];
 ```
 
-I make sure the user is authenticated, and has an active subscription. Then I use the route params to dynamically load the corresponding content page: either `<Theory/>` containing some markdown or an `<InteractiveExercise/>`. I also pass along some additional information about the current lesson, like a `title`, but also some information about the _next_ lesson.
+I also make sure the user is authenticated, and has an active subscription, and then I render the corresponding content page: either `<Theory/>` containing some markdown or an `<InteractiveExercise/>`. I also pass along some additional information about the current lesson, like a `title`, but also some information about the _next_ lesson.
 
-![demo](./blog/demo.gif)
+![demo](./blog/new_demo_interactive.gif)
 
 The interactive exercises use Typescript to create an AST of the code that gets input by the user, and then I do some static analysis on the code to verify wether or not the user has completed all the tasks in the exercise:
 

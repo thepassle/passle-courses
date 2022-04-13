@@ -25,11 +25,7 @@ export async function get({token}, req) {
 		});
 	
 		/** Set headers */
-		const headers = createHeaders({
-			jwt, 
-			active: true, 
-			location: '/mollie/cb?code=FIRST_PAYMENT_OK'
-		});
+		const headers = createHeaders({jwt, location: '/mollie/cb?code=FIRST_PAYMENT_OK'});
 	
 		return new Response(null, {
 			status: 302,

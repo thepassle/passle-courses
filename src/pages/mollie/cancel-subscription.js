@@ -40,11 +40,7 @@ export async function get(_, req) {
           active: false
         });
 
-        const headers = createHeaders({
-          jwt, 
-          active: false, 
-          location: '/mollie/cb?code=CANCEL_OK'
-        });
+        const headers = createHeaders({jwt, location: '/mollie/cb?code=CANCEL_OK'});
 
         return new Response(null, {status: 302, headers});
       } catch(e) {

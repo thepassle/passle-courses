@@ -1,0 +1,65 @@
+---
+import fs from 'node:fs/promises';
+import { Markdown } from 'astro/components';
+import Header from '../../../components/Header.astro';
+import Sidebar from '../../../components/Sidebar.astro';
+import InteractiveExercise from '../../../layouts/InteractiveExercise.astro';
+import Theory from '../../../layouts/Theory.astro';
+import { isLoggedIn } from '../../utils/auth.js';
+import { courseIndex } from './courseIndex.js';
+
+const user = await isLoggedIn(Astro.request);
+
+if(!user.authed) {
+  return Astro.redirect('/');
+}
+
+if(!user.active) {
+  return Astro.redirect('/sw/subscribe#register');
+}
+
+const urlPattern = new URLPattern({pathname: '/sw/chapter/:chapter/lesson/:lesson'});
+const match = urlPattern.exec(new URL(Astro.request.url));
+const { chapter, lesson } = match.pathname.groups;
+
+const currentLesson = courseIndex[chapter].lessons[lesson];
+const nextLesson = courseIndex[chapter].lessons[+lesson + 1];
+const nextChapter = courseIndex[+chapter + 1];
+
+if(!currentLesson) {
+  return Astro.redirect('/error?code="LESSON_NOT_FOUND')
+}
+
+let markdown = '';
+
+if(currentLesson?.markdownLocation) {
+  markdown = await fs.readFile(new URL(currentLesson.markdownLocation, import.meta.url), 'utf-8');
+}
+
+---
+{currentLesson?.markdownLocation
+  ? <Theory 
+      title={currentLesson.title} 
+      hasNextChapter={!!nextChapter} 
+      isLastLesson={!nextLesson} 
+      next={nextLesson?.title ?? nextChapter?.title ?? ''} 
+      chapter={chapter} 
+      lesson={lesson}
+    >
+      <Header slot="header" user={user}/>
+      <Sidebar slot="sidebar" chapter={chapter} lesson={lesson} courseIndex={courseIndex}/>
+      <Markdown slot="content" content={markdown} />
+    </Theory>
+  : <InteractiveExercise 
+      title={currentLesson.title} 
+      next={nextLesson?.title ?? nextChapter?.title ?? ''} 
+      hasNextChapter={!!nextChapter} 
+      isLastLesson={!nextLesson} 
+      chapter={chapter} 
+      lesson={lesson} 
+      validator={currentLesson.validatorsLocation}
+    >
+      <Header slot="header" user={user}/>
+      <Sidebar slot="sidebar" chapter={chapter} lesson={lesson} courseIndex={courseIndex}/>
+    </InteractiveExercise>
+}

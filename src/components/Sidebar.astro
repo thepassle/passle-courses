@@ -1,5 +1,6 @@
 ---
-const { index, courseIndex } = Astro.props;
+import chevron from '../assets/chevron-right.svg';
+const { chapter, lesson, courseIndex } = Astro.props;
 ---
 <style>
   *:focus {
@@ -17,16 +18,19 @@ const { index, courseIndex } = Astro.props;
     box-shadow: rgb(0 0 0 / 12%) 0px 0px 4px 0px, rgb(0 0 0 / 24%) 0px 4px 4px 0px;
   }
 
+  .sidebar > ul:first-of-type {
+    margin-top: 20px;
+  }
   ul {
     list-style: none;
     margin: 0;
     padding: 0;
-    margin-top: 20px;
   }
 
   li {
-    padding: 8px 30px;
+    padding: 12px 18px;
   }
+
 
   .sidebar-link {
     display: block;
@@ -48,25 +52,82 @@ const { index, courseIndex } = Astro.props;
     background-color: #f5f5f5;
   }
 
+  .active-chapter,
   .current {
     font-weight: 500;
     background-color: #f5f5f5;
     border-left: solid 5px rgb(0, 82, 255);
   }
+
+  summary {
+    list-style: none;
+  }
+  summary:hover,
+  summary:focus {
+    cursor: pointer;
+    background-color: #f5f5f5;
+  }
+
+  summary li {
+    display: flex;
+    align-items: center;
+  }
+
+  details .chevron {
+    margin-right: 12px;
+    transition: transform 0.1s ease-in-out;
+  }
+  details[open] .chevron {
+    transform: rotate(90deg);
+  }
+
+  .active-chapter .chevron {
+    margin-left: -5px;
+  }
+
+  .lessons {
+    list-style: none;
+    counter-reset: my-awesome-counter;
+  }
+  .lessons li {
+    counter-increment: my-awesome-counter;
+    padding-left: 50px;
+  }
+  .lessons li::before {
+    content: counter(my-awesome-counter) ". ";
+    margin-right: 8px;
+    font-weight: bold;
+  }
 </style>
 <div class="sidebar">
   <ul>
-    {courseIndex.map((lesson, i) => {
-      const current = i === parseInt(index);
-
-      return i > parseInt(index) 
-        ? (<li>{lesson.title}</li>) 
-        : (<a class="sidebar-link" href={`/sw/${i}`}>
-            <li class={current && 'current'}>
-              {lesson.title}
-            </li>
-          </a>
-        )
+    {courseIndex.map((c, i) => {
+      return (
+        <ul>
+          <details open={parseInt(chapter) === i}>
+            <summary>
+              <li class={parseInt(chapter) === i ? 'active-chapter' : ''}>
+                <img class="chevron" src={chevron} alt=""/>
+                {c.title}
+              </li>
+            </summary>
+            <ul class="lessons">
+              {c.lessons.map((l, j) => {
+                return parseInt(chapter) > i
+                  ? (<a class="sidebar-link" href={`/sw/chapter/${i}/lesson/${j}`}>
+                    <li class={lesson === j ? 'active-lesson' : ''}>{l.title}</li>
+                  </a>)
+                  : (parseInt(chapter) >= i && parseInt(lesson) >= j) 
+                    ? (<a class="sidebar-link" href={`/sw/chapter/${i}/lesson/${j}`}>
+                        <li class={lesson === j ? 'active-lesson' : ''}>{l.title}</li>
+                      </a>)
+                    : <li>{l.title}</li>
+                })
+              }
+            </ul>
+          </details>
+        </ul>
+      )
     })}
   </ul>
 </div>

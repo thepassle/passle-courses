@@ -36,16 +36,14 @@ function sevenDaysFromNow() {
   const d = new Date();
   const time = 7 * 24 * 60 * 60 * 1000
   d.setTime(d.getTime() + (time));
-  return d.toGMTString();
+  return d.toUTCString();
 }
 
-export function createHeaders({active, jwt, location}) {
+export function createHeaders({jwt, location}) {
   const expires = sevenDaysFromNow();
-
   const headers = new Headers();
   
-  headers.append('Set-Cookie', `active=${active}; Expires=${expires}; Path=/; HttpOnly`);
-  headers.append('Set-Cookie', `jwt=${jwt}; Expires=${expires}; Path=/; HttpOnly`);
+  headers.append('Set-Cookie', `jwt=${jwt}; Expires=${expires}; Path=/; HttpOnly; Secure;`);
   headers.append('Location', location);
   
   return headers;
