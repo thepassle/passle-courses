@@ -183,10 +183,10 @@ Another point of feedback: If you have an `.env` file in your project, you can a
     <script>
       google.accounts.id.initialize({ 
         // wont work :(
-				client_id: import.meta.env.GOOGLE_CLIENT_ID, 
-				login_uri: `${import.meta.env.APP_URL}/auth/success`
-				ux_mode: "redirect", 
-			});
+        client_id: import.meta.env.GOOGLE_CLIENT_ID, 
+        login_uri: `${import.meta.env.APP_URL}/auth/success`
+        ux_mode: "redirect", 
+      });
     </script>
   </body>
 </html> 
