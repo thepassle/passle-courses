@@ -64,6 +64,8 @@ Ran into an error.
 
 ## The pain of the bleeding edge
 
+![issues](./blog/issues.png)
+
 Ah, the pain of being on the bleeding edge. When trying out beta versions of projects, it's only natural to run into some issues here and there; in fact, its the entire point. Projects are able to gather valuable feedback from the community and catch issues early, and for users it's a great way to learn about new features. During the course of this project I ran into several issues, that will hopefully constructively contribute to the official stable release. 
 
 In the case of the `Invalid URL`; the Netlify blog failed to mention it, but apparently you're supposed to configure your `site` property in the `astro.config.mjs`, e.g.:
