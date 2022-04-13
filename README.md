@@ -241,6 +241,51 @@ export function get() {
 }
 ```
 
+### Middleware
+
+The biggest missing piece of the puzzle however is middleware. Several times I found a need for middleware, but being unaware how to achieve something like it. For example, there were certain assets that I only want to be served when the user is authenticated, and was hoping I could do something like:
+
+`/protected/[...assets]/index.js`:
+```js
+import { isLoggedIn } from '../../utils/auth.js';
+
+export async function get(_, request) {
+  const { authed } = await isLoggedIn(request);
+
+  const url = new URL(request.url);
+  const protectedRoutes = new URLPattern({pathname: '/protected/:image'});
+  const match = protectedRoutes.exec(url);
+
+  // We have a match, this is a 'protected' asset
+  if(match) {
+    if(authed) {
+      // If user is authenticated, pass the request along
+      return fetch(request);
+    } else {
+      // If user is not authenticated, forbidden
+      return new Response(null, {status: 403});
+    }
+  }
+  
+  // request didnt match any protected assets, pass it on as normal
+  return fetch(request);
+}
+```
+
+Or perhaps something like:
+
+```js
+export const get = [
+  authMiddleware,
+  async (_, request) => {
+    // route handler etc
+  }
+];
+```
+
+But this turned out not to be possible yet. Hopefully something like this will be implemented in the future.
+
+
 ## App Showcase: Course Selling Site
 
 Alright, enough technicality, let's take a look at the course selling website I built using Astro SSR. I've been wanting to find a nice way to create and sell some online courses, and I've been lowkey looking for a way to start doing this. This has been something thats been in the background of my mind for a while now, and Astro SSR seemed like a nice excuse for me to take some time to dive into this.
