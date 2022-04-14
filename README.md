@@ -16,7 +16,7 @@ In this blog I'll go over:
 - some of the issues I encountered in hopes of providing feedback for the official release
 - a showcase of the application I built
 
-![demo](./blog/new_demo_overview.gif)
+![demo](./blog/demo_overview_latest.gif)
 
 ## Getting started
 
@@ -287,6 +287,30 @@ But this turned out not to be possible yet. Hopefully something like this will b
 
 ![rfc](./blog/rfc.png)
 
+And just for the time being, (and mostly just for fun), I created a little package: https://github.com/thepassle/astro-router
+
+`/sales/[...all]/index.js`:
+```js
+import { router } from 'astro-router';
+import { auth, logger } from './middleware.js';
+import { User, Order } from './db.js';
+
+export const get = router({
+  routes: [
+    {
+      path: '/sales/:user/:order',
+      middleware: [logger, auth],
+      response({params}) {
+        const user = await User.findOne({id: params.user});
+        const order = await Order.findOne({id: params.order});
+
+        return new Response(null, {status: 200});
+      }
+    }
+  ]
+})
+```
+
 ## App Showcase: Course Selling Site
 
 Alright, enough technicality, let's take a look at the course selling website I built using Astro SSR. I've been wanting to find a nice way to create and sell some online courses, and I've been lowkey looking for a way to start doing this. This has been something thats been in the background of my mind for a while now, and Astro SSR seemed like a nice excuse for me to take some time to dive into this.
@@ -426,7 +450,7 @@ const currentLesson = courseIndex[chapter].lessons[lesson];
 
 I also make sure the user is authenticated, and has an active subscription, and then I render the corresponding content page: either `<Theory/>` containing some markdown or an `<InteractiveExercise/>`. I also pass along some additional information about the current lesson, like a `title`, but also some information about the _next_ lesson.
 
-![demo](./blog/new_demo_interactive.gif)
+![demo](./blog/demo_interactive_latest.gif)
 
 The interactive exercises use Typescript to create an AST of the code that gets input by the user, and then I do some static analysis on the code to verify wether or not the user has completed all the tasks in the exercise:
 
