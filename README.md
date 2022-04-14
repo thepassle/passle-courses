@@ -467,16 +467,7 @@ export const validators = [
 Since `monaco-editor` and `typescript` (even when bundled) are fairly large files, I also whipped up a simple service worker to cache these large files, and make sure performance stays good:
 
 ```js
-const VERSION = 1;
-const CACHENAME = `passle-courses-v${VERSION}`;
-
-self.addEventListener('install', () => {
-  return self.skipWaiting();
-});
-
-self.addEventListener('activate', () => {
-  return clients.claim();
-});
+// etc
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -489,27 +480,6 @@ self.addEventListener('install', (event) => {
     })
   );
 });
-
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames
-          .filter(cacheName => cacheName.startsWith('passle-courses-') && cacheName !== CACHENAME)
-          .map(cacheName => caches.delete(cacheName))
-      )
-    })
-  )
-});
-
-self.addEventListener('fetch', function (event) {
-  event.respondWith(
-    caches.match(event.request).then(function (response) {
-      return response || fetch(event.request);
-    }),
-  );
-});
-
 ```
 
 ## Conclusion
