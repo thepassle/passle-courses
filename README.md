@@ -346,6 +346,9 @@ To create a subscription for a user with recurring payments I do the following:
 - I then create a [Mollie Payment](https://docs.mollie.com/reference/v2/payments-api/create-payment) using the `mollieId`
 - I then also create a special `ActivationToken`, and store it in my database, that will automatically expire in time. The reason is that the Mollie Payment will lead to a redirect URI, where I activate the user's subscription account. If somebody was to find out the redirect URI, they could just navigate to that url and get a free subscription. Checking to see if an `ActivationToken` exists, however, prevents this from happening.
 
+![mollie](./blog/mollie.png)
+> This is mock data
+
 #### Dynamic routing
 This is also where I get to highlight a nice Astro SSR feature: route params. Before making the payment, I create a unique `ActivationToken`, that I use as part of my Mollie `redirectUrl`, e.g. `${import.meta.env.APP_URL}/mollie/${token}/cb`.
 
