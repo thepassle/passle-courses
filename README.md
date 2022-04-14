@@ -283,8 +283,9 @@ export const get = [
 ];
 ```
 
-But this turned out not to be possible yet. Hopefully something like this will be implemented in the future.
+But this turned out not to be possible yet. Hopefully something like this will be implemented in the future, I created a [RFC](https://github.com/withastro/rfcs/discussions/174) here.
 
+![rfc](./blog/rfc.png)
 
 ## App Showcase: Course Selling Site
 
