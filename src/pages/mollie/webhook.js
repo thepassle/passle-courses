@@ -3,12 +3,13 @@ import { User } from '../db/User.js';
 import { Authorization, ContentType } from '../utils/auth.js';
 
 export async function post(_, req) {
-  const body = await req.json();
+  const body = await req.text();
+  const params = new URLSearchParams(body);
+  const id = params.get('id');
 
-  const transactionRequest = await fetch(`https://api.mollie.com/v2/payments/${body.id}`,
+  const transactionRequest = await fetch(`https://api.mollie.com/v2/payments/${id}`,
     { headers: { 'Authorization': `Bearer ${import.meta.env.MOLLIE_API_KEY}` } }
   );
-
   if (transactionRequest.ok) {
     const transaction = await transactionRequest.json();
 
@@ -18,12 +19,16 @@ export async function post(_, req) {
      * 
      * Make sure this check ONLY passes during local dev! 
      */
-    if (import.meta.env.ENV === 'dev' && body.mock) {
+    if (import.meta.env.ENV === 'dev' && body?.mock) {
       transaction.status = body.status;
       transaction.sequenceType = body.sequenceType;
     }
 
     const { status, customerId } = transaction;
+
+    if(!customerId) {
+      return new Response('', {status: 200});
+    }
 
     try {
       await mongoose.connect(import.meta.env.MONGODB_ADDON_URI);
@@ -47,6 +52,7 @@ export async function post(_, req) {
      * In dutch we say "voor niks gaat de zon op"
      */
     if (status === 'canceled' || status === 'failed') {
+
       if (transaction.sequenceType === 'recurring') {
         const cancelRequest = await fetch(`https://api.mollie.com/v2/customers/${mongoUser.mollieId}/subscriptions/${mongoUser.subscriptionId}`,
           {
@@ -72,60 +78,63 @@ export async function post(_, req) {
      */
     if (status === 'paid') {
       if (transaction.sequenceType === 'first') {
-        try {
-          const mandatesRequest = await fetch(`https://api.mollie.com/v2/customers/${mollieId}/mandates`,
-            {
-              headers: { ...Authorization }
-            });
 
-          if (mandatesRequest.ok) {
-            const mandates = await mandatesRequest.json();
-            const mandate = mandates._embedded.mandates.find(({ status }) => status === 'pending' || status === 'valid');
+        const mandatesRequest = await fetch(`https://api.mollie.com/v2/customers/${mollieId}/mandates`,
+          {
+            headers: { ...Authorization }
+          });
 
-            if (!mandate) {
-              throw new Error('No valid or pending mandate found. Set up first payment for customer.');
-            } else {
-              const createSubscriptionRequest = await fetch(`https://api.mollie.com/v2/customers/${mollieId}/subscriptions`,
-                {
-                  method: 'POST',
-                  headers: {
-                    ...Authorization,
-                    ...ContentType,
-                  },
-                  body: JSON.stringify({
-                    amount: {
-                      value: '10.00',
-                      currency: 'EUR',
-                    },
-                    interval: '1 month',
-                    description: import.meta.env.MOLLIE_SUBSCRIPTION_DESCRIPTION,
-                    ...(import.meta.env.ENV !== 'dev' ? { webhookUrl: `${import.meta.env.APP_URL}/mollie/webhook` } : {}),
-                  })
-                });
+        if (mandatesRequest.ok) {
+          const mandates = await mandatesRequest.json();
+          const mandate = mandates._embedded.mandates.find(({ status }) => status === 'pending' || status === 'valid');
 
-              if (createSubscriptionRequest.ok) {
-                const subscription = await createSubscriptionRequest.json();
-                try {
-                  mongoUser.subscriptionActive = true;
-                  mongoUser.subscriptionId = subscription.id;
-                  await mongoUser.save();
-                } catch {
-                  throw new Error('Failed to save subscription id on the db user.');
-                }
-              } else {
-                throw new Error('Failed to create subscription.');
-              }
-            }
+          if (!mandate) {
+            throw new Error('No valid or pending mandate found. Set up first payment for customer.');
           } else {
-            throw new Error('Mandates request failed.');
+
+            const createSubscriptionRequest = await fetch(`https://api.mollie.com/v2/customers/${mollieId}/subscriptions`,
+              {
+                method: 'POST',
+                headers: {
+                  ...Authorization,
+                  ...ContentType,
+                },
+                body: JSON.stringify({
+                  amount: {
+                    value: '10.00',
+                    currency: 'EUR',
+                  },
+                  interval: '1 month',
+                  description: import.meta.env.MOLLIE_SUBSCRIPTION_DESCRIPTION,
+                  ...(import.meta.env.ENV !== 'dev' ? { webhookUrl: `${import.meta.env.APP_URL}/mollie/webhook` } : {}),
+                })
+              });
+
+            let subscription;
+            try {
+              subscription = await createSubscriptionRequest.json();
+            } catch (e) {
+            }
+
+            if (createSubscriptionRequest.ok) {
+              try {
+                mongoUser.subscriptionActive = true;
+                mongoUser.subscriptionId = subscription.id;
+                await mongoUser.save();
+              } catch {
+                throw new Error('Failed to save subscription id on the db user.');
+              }
+            } else {
+              throw new Error('Failed to create subscription.');
+            }
           }
-        } catch {
-          throw new Error(`Failed to get mongo user for id "${mollieId}" and payment id "${body.id}"`);
+        } else {
+          throw new Error('Mandates request failed.');
         }
       }
     }
   } else {
-    throw new Error(`Failed to get transaction ${body.id}`);
+    throw new Error(`Failed to get transaction ${id}`);
   }
 
   return new Response(null, { status: 200 });

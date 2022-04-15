@@ -5,7 +5,7 @@ export const courseIndex = [
     lessons: [
       {
         title: 'Introduction',
-        markdownLocation: './theory/introduction.md'
+        markdownLocation: './sw/theory/introduction.md'
       },
       {
         title: 'Exercise: Registering',
@@ -19,7 +19,7 @@ export const courseIndex = [
     lessons: [
       {
         title: 'Introduction to caching strategies',
-        markdownLocation: './theory/caching.md'
+        markdownLocation: './sw/theory/caching.md'
       },
       {
         title: 'Exercise: caching',
@@ -27,7 +27,38 @@ export const courseIndex = [
       },
       {
         title: 'Wrapping up',
-        markdownLocation: './theory/outro.md'
+        markdownLocation: './sw/theory/outro.md'
+      }
+    ]
+  },
+  {
+    title: 'Updating lifecycle',
+    lessons: [
+      {
+        title: 'Service worker updates',
+        markdownLocation: './sw/theory/caching.md'
+      }
+    ]
+  },
+  {
+    title: 'Clients claim',
+    lessons: [
+      {
+        title: 'Introduction to updates',
+        markdownLocation: './sw/theory/caching.md'
+      },
+      {
+        title: 'Clients claim',
+        markdownLocation: './sw/theory/outro.md'
+      }
+    ]
+  },
+  {
+    title: 'Skip waiting',
+    lessons: [
+      {
+        title: 'Skip waiting',
+        markdownLocation: './sw/theory/caching.md'
       }
     ]
   },

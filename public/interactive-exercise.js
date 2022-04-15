@@ -20,7 +20,7 @@
         <div class="result-list">
           <h1>Tasks:</h1>
           <ul>
-            ${this.results.map(({title:n,result:r})=>U`<li>${r?"\u2705":"\u274C"} ${n}</li>`)}
+            ${this.results.map(({title:n,result:r})=>U`<li><span class="result-list-icon">${r?"\u2705":"\u274C"}</span> ${n}</li>`)}
           </ul>
           <p>${e?"All done!":"Good luck!"}</p>
         </div>
@@ -28,7 +28,9 @@
         ${((t=this.resources)==null?void 0:t.length)>0?U`
             <div class="resources">
               <h1>Resources</h1>
-              ${this.resources.map(({title:n,url:r})=>U`<a target="_blank" href="${r}">${n}</a>`)}
+              <div class="resources-list">
+                ${this.resources.map(({title:n,url:r})=>U`<a target="_blank" href="${r}">${n}</a>`)}
+              </div>
             </div>
           `:""}
 

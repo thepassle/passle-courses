@@ -27,23 +27,23 @@ export async function get(_, req) {
   }
 
   hasMollieId = !!mongoUser?.mollieId;
-
+  
   /** No mollie id exists yet, and we have a mongoUser, we need to create a mollie user */
   let mollieUser;
   if(!hasMollieId && !!mongoUser) {
     try {
       const mollieUserRequest = await fetch('https://api.mollie.com/v2/customers', 
-        {
-          method: 'POST',
-          headers: {
-            ...Authorization,
-            ...ContentType
-          },
-          body: JSON.stringify({
-            ...({email: user?.email} || {}),
-            ...({name: user?.name} || {}),
-          })
-        });
+      {
+        method: 'POST',
+        headers: {
+          ...Authorization,
+          ...ContentType
+        },
+        body: JSON.stringify({
+          ...({email: user?.email} || {}),
+          ...({name: user?.name} || {}),
+        })
+      });
       
       if(mollieUserRequest.ok) {
         mollieUser = await mollieUserRequest.json();
@@ -91,14 +91,15 @@ export async function get(_, req) {
         customerId: mollieId,
         sequenceType: 'first',
         description: import.meta.env.MOLLIE_FIRST_DESCRIPTION,
-        // @TODO deployment url
         ...(import.meta.env.ENV !== 'dev' ? {webhookUrl: `${import.meta.env.APP_URL}/mollie/webhook`} : {}),
         redirectUrl: `${import.meta.env.APP_URL}/mollie/${token}/payment-cb`,
       }),
     });
   
+
   if(createPaymentRequest.ok) {
     const payment = await createPaymentRequest.json();
+
     const redirectUrl = payment._links.checkout.href;
     return new Response(null, {status: 302, headers: {'Location': redirectUrl}});
   } else {

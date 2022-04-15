@@ -21,6 +21,20 @@ const { chapter, lesson, courseIndex } = Astro.props;
   .sidebar > ul:first-of-type {
     margin-top: 20px;
   }
+
+  .sidebar > ul {
+    position: relative;
+  }
+
+  ul details {
+    position: relative;
+  }
+
+  summary:focus{
+    position: relative;
+    z-index: 9;
+  }
+
   ul {
     list-style: none;
     margin: 0;
@@ -54,6 +68,7 @@ const { chapter, lesson, courseIndex } = Astro.props;
 
   .active-chapter,
   .current {
+    border-radius: 4px;
     font-weight: 500;
     background-color: #f5f5f5;
     border-left: solid 5px rgb(0, 82, 255);
@@ -100,34 +115,32 @@ const { chapter, lesson, courseIndex } = Astro.props;
   }
 </style>
 <div class="sidebar">
-  <ul>
-    {courseIndex.map((c, i) => {
-      return (
-        <ul>
-          <details open={parseInt(chapter) === i}>
-            <summary>
-              <li class={parseInt(chapter) === i ? 'active-chapter' : ''}>
-                <img class="chevron" src={chevron} alt=""/>
-                {c.title}
-              </li>
-            </summary>
-            <ul class="lessons">
-              {c.lessons.map((l, j) => {
-                return parseInt(chapter) > i
+  {courseIndex.map((c, i) => {
+    return (
+      <ul>
+        <details open={parseInt(chapter) === i}>
+          <summary>
+            <li class={parseInt(chapter) === i ? 'active-chapter' : ''}>
+              <img class="chevron" src={chevron} alt=""/>
+              {c.title}
+            </li>
+          </summary>
+          <ul class="lessons">
+            {c.lessons.map((l, j) => {
+              return parseInt(chapter) > i
+                ? (<a class="sidebar-link" href={`/sw/chapter/${i}/lesson/${j}`}>
+                  <li class={lesson === j ? 'active-lesson' : ''}>{l.title}</li>
+                </a>)
+                : (parseInt(chapter) >= i && parseInt(lesson) >= j) 
                   ? (<a class="sidebar-link" href={`/sw/chapter/${i}/lesson/${j}`}>
-                    <li class={lesson === j ? 'active-lesson' : ''}>{l.title}</li>
-                  </a>)
-                  : (parseInt(chapter) >= i && parseInt(lesson) >= j) 
-                    ? (<a class="sidebar-link" href={`/sw/chapter/${i}/lesson/${j}`}>
-                        <li class={lesson === j ? 'active-lesson' : ''}>{l.title}</li>
-                      </a>)
-                    : <li>{l.title}</li>
-                })
-              }
-            </ul>
-          </details>
-        </ul>
-      )
-    })}
-  </ul>
+                      <li class={lesson === j ? 'active-lesson' : ''}>{l.title}</li>
+                    </a>)
+                  : <li>{l.title}</li>
+              })
+            }
+          </ul>
+        </details>
+      </ul>
+    )
+  })}
 </div>

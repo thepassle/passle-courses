@@ -11,7 +11,6 @@ const user = await isLoggedIn(Astro.request);
   .section {
     height: calc(100vh - 64px);
 		max-height: calc(900px - 64px);
-    border-bottom: solid lightgrey 1px;
   }
 
 	.big-title {
@@ -134,6 +133,7 @@ const user = await isLoggedIn(Astro.request);
 		margin-left: auto;
 		margin-right: auto;
 		display: flex;		
+		align-items: center;
 	}
 
 	.instructor img {

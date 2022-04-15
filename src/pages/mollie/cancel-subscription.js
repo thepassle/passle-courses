@@ -18,19 +18,21 @@ export async function get(_, req) {
     return new Response(null, {status: 302, headers: {'Location': '/error?code=FAILED_TO_FIND_USER'}});
   }
   
+
   if(mongoUser) {
     const cancelRequest = await fetch(`https://api.mollie.com/v2/customers/${mongoUser.mollieId}/subscriptions/${mongoUser.subscriptionId}`,
       {
         method: 'DELETE',
         headers: { ...Authorization },
       });
-
+    
     if(cancelRequest.ok) {
       try {
         mongoUser.subscriptionActive = false;
         mongoUser.subscriptionId = '';
         await mongoUser.save();
-
+        
+        
         /** We have to update the jwt now */
         const jwt = createToken({
           name: mongoUser.username,
@@ -39,6 +41,7 @@ export async function get(_, req) {
           id: mongoUser.id,
           active: false
         });
+
 
         const headers = createHeaders({jwt, location: '/mollie/cb?code=CANCEL_OK'});
 

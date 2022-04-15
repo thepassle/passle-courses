@@ -54,19 +54,20 @@ const { validator, isLastLesson, hasNextChapter, lesson, chapter, next, title } 
       margin-right: 20px;
 
       padding: 20px;
-      width: 50%;
     }
 
     #editor {
+      width: 65%;
       margin-right: 10px;
       padding-left: 0;
       overflow-y: clip;
       box-shadow: rgb(0 0 0 / 12%) 0px 0px 4px 0px, rgb(0 0 0 / 24%) 0px 4px 4px 0px;
       background: white;
-      border-radius: 10px;
+      border-radius: 6px;
     }
 
     #results {
+      width: 35%;
       margin-left: 10px;
     }
 
@@ -79,40 +80,56 @@ const { validator, isLastLesson, hasNextChapter, lesson, chapter, next, title } 
     .result-list {
       font-weight: 300;
       padding: 20px;
-      border-radius: 10px;
+      border-radius: 6px;
       margin-bottom: 20px;
       background: white;
 
       box-shadow: rgb(0 0 0 / 12%) 0px 0px 4px 0px, rgb(0 0 0 / 24%) 0px 4px 4px 0px;
       background: white;
-      border-radius: 10px;
+      border-radius: 6px;
+    }
+
+    .result-list p {
+      margin-bottom: 0;
+    }
+
+    .result-list ul {
+      padding-left: 25px;
+    }
+    .result-list-icon {
+      margin-right: 8px;
     }
 
     .resources {
       padding: 20px;
-      border-radius: 10px;
+      border-radius: 6px;
       background: white;
 
       box-shadow: rgb(0 0 0 / 12%) 0px 0px 4px 0px, rgb(0 0 0 / 24%) 0px 4px 4px 0px;
       background: white;
-      border-radius: 10px;
+      border-radius: 6px;
       margin-bottom: 20px;
     }
 
     .resources a {
       font-weight: 300;
-      
+    }
+
+    .resources-list {
+      margin-top: 20px;
     }
 
     h1 {
+      font-size: 26px;
       margin-top: 0;
+      margin-bottom: 0;
     }
 
     ul {
       font-weight: 300;
       list-style: none;
-      margin-top: 30px;
-      margin-bottom: 30px;
+      margin-top: 20px;
+      margin-bottom: 20px;
     }
 
 
@@ -121,7 +138,7 @@ const { validator, isLastLesson, hasNextChapter, lesson, chapter, next, title } 
 
       box-shadow: rgb(0 0 0 / 12%) 0px 0px 4px 0px, rgb(0 0 0 / 24%) 0px 4px 4px 0px;
       background: white;
-      border-radius: 10px;
+      border-radius: 6px;
     }
 
     .next-anchor:visited .next {
@@ -132,7 +149,7 @@ const { validator, isLastLesson, hasNextChapter, lesson, chapter, next, title } 
     .next-anchor {
       color: black;
       transition: transform 0.1s ease-in;
-      border-radius: 10px;
+      border-radius: 6px;
       text-decoration: none;
     }
 

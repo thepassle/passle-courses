@@ -1,5 +1,4 @@
 ---
-import fs from 'node:fs/promises';
 import { Markdown } from 'astro/components';
 import Header from '../../../components/Header.astro';
 import Sidebar from '../../../components/Sidebar.astro';
@@ -33,7 +32,13 @@ if(!currentLesson) {
 let markdown = '';
 
 if(currentLesson?.markdownLocation) {
-  markdown = await fs.readFile(new URL(currentLesson.markdownLocation, import.meta.url), 'utf-8');
+  try {
+    const site = new URL(Astro.request.url);
+    const url = new URL(currentLesson?.markdownLocation, site.origin);
+    markdown = await fetch(url.href).then(r => r.text());
+  } catch(e) {
+    markdown = 'Something went wrong.';
+  }
 }
 
 ---
