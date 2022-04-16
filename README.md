@@ -192,6 +192,9 @@ Another point of feedback: If you have an `.env` file in your project, you can a
 </html> 
 ```
 
+> Update: It has since been brought to my attention that environment variables prefixed with `PUBLIC_` are exposed to the client. Alternatively, I could have used the [`define:vars`](https://docs.astro.build/en/reference/directives-reference/#definevars) Template Directive.
+
+
 ### Redirect with error message
 
 In some of my route handlers, I have to handle quite some error cases. Instinctively, I tried to do something like:
