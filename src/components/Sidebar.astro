@@ -1,6 +1,6 @@
 ---
 import chevron from '../assets/chevron-right.svg';
-const { chapter, lesson, courseIndex } = Astro.props;
+const { chapter, lesson, courseIndex, title } = Astro.props;
 ---
 <style>
   *:focus {
@@ -13,7 +13,8 @@ const { chapter, lesson, courseIndex } = Astro.props;
   .sidebar {
     z-index: 3;
     font-weight: 300;
-    width: 370px;
+    flex-shrink: 0;
+    width: 275px;
     background: white;
     box-shadow: rgb(0 0 0 / 12%) 0px 0px 4px 0px, rgb(0 0 0 / 24%) 0px 4px 4px 0px;
   }
@@ -49,18 +50,21 @@ const { chapter, lesson, courseIndex } = Astro.props;
   .sidebar-link {
     display: block;
     text-decoration: none;
-    color: rgb(0, 82, 255);
+    color: black;
+    /* color: rgb(0, 82, 255); */
+  }
+
+  .sidebar-link:visited {
+    color: black;
   }
 
   .sidebar-link:hover,
   .sidebar-link:focus{
+    color: rgb(0, 82, 255);
     text-decoration: underline;
     background-color: #f5f5f5;
   }
 
-  .sidebar-link:visited {
-    color: rgb(0, 82, 255);
-  }
 
   .sidebar-link:hover {
     background-color: #f5f5f5;
@@ -113,8 +117,22 @@ const { chapter, lesson, courseIndex } = Astro.props;
     margin-right: 8px;
     font-weight: bold;
   }
+
+  .course-title {
+    text-align: center;
+    font-weight: 500;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .current-lesson {
+    font-weight: 500;
+  }
 </style>
 <div class="sidebar">
+  <p class="course-title">{title}</p>
   {courseIndex.map((c, i) => {
     return (
       <ul>
@@ -127,15 +145,12 @@ const { chapter, lesson, courseIndex } = Astro.props;
           </summary>
           <ul class="lessons">
             {c.lessons.map((l, j) => {
-              return parseInt(chapter) > i
-                ? (<a class="sidebar-link" href={`/sw/chapter/${i}/lesson/${j}`}>
-                  <li class={lesson === j ? 'active-lesson' : ''}>{l.title}</li>
+              return parseInt(lesson) === j && parseInt(chapter) === i 
+                ? (<li class="current-lesson">{l.title}</li>)
+                : (<a class="sidebar-link" href={`/sw/chapter/${i}/lesson/${j}`}>
+                  <li class={parseInt(lesson) === j ? 'active-lesson' : ''}>{l.title}</li>
                 </a>)
-                : (parseInt(chapter) >= i && parseInt(lesson) >= j) 
-                  ? (<a class="sidebar-link" href={`/sw/chapter/${i}/lesson/${j}`}>
-                      <li class={lesson === j ? 'active-lesson' : ''}>{l.title}</li>
-                    </a>)
-                  : <li>{l.title}</li>
+            
               })
             }
           </ul>

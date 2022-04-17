@@ -1,0 +1,33 @@
+---
+import './quiz-question.js';
+import './quiz-next-card.js';
+const { questions, title } = Astro.props; 
+---
+<h1>{title}</h1>
+<div id="quiz-questions">
+  {questions.map((question, questionId) => (
+    <quiz-question answer={String(question.answer)} client:visible>
+      <h2 slot="question">{question.question}</h2>
+      <div slot="options" class="options-list">
+        {question.options.map((option, optionId) => (
+          <div class="option">
+            <input name={`question-${questionId}`} id={`option-${questionId}-${optionId}`} type="radio" value={option}></input>
+            <label for={`option-${questionId}-${optionId}`}>{option}</label>
+          </div>
+        ))}
+      </div>
+    </quiz-question>
+  ))}
+  <quiz-next-card client:visible></quiz-next-card>
+</div>
+
+<script is:inline>
+  const questionsContainer = document.getElementById('quiz-questions');
+  questionsContainer.addEventListener('question-answered', event => {
+    const questions = document.querySelectorAll('quiz-question');
+    const allDone = [...questions].every(question => question.answered);
+
+    const nextCard = document.querySelector('quiz-next-card');
+    nextCard.show = allDone;
+  });
+</script>

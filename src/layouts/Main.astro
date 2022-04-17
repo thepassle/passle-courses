@@ -3,6 +3,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
 const { title = 'Passle Courses', user = {authed: false} } = Astro.props;
+const prod = import.meta.env.ENV === 'prod';
 ---
 <html lang="en">
 	<head>
@@ -165,16 +166,24 @@ const { title = 'Passle Courses', user = {authed: false} } = Astro.props;
 		</main>
 
     <Footer user={user}/>
-    <script>
-      // if('serviceWorker' in navigator) {
-      //   navigator.serviceWorker.register('./sw.js')
-      //     .then(() => {
-      //       console.log('sw registered');
-      //     })
-      //     .catch(() => {
-      //       console.log('failed to register sw');
-      //     });
-      // }
+    <script define:vars={{ prod }}>
+      if(prod && 'serviceWorker' in navigator) {
+        let refreshing = false;
+
+        navigator.serviceWorker.register('./sw.js')
+          .then(() => {
+            console.log('sw registered');
+          })
+          .catch(() => {
+            console.log('failed to register sw');
+          });
+
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (refreshing) return;
+          window.location.reload();
+          refreshing = true;
+        });
+      };
     </script>
 	</body>
 </html>

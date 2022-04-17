@@ -1,5 +1,6 @@
 ---
 const { validator, isLastLesson, hasNextChapter, lesson, chapter, next, title } = Astro.props;
+const prod = import.meta.env.ENV === 'prod';
 ---
 <!doctype html>
 <html lang="en">
@@ -207,17 +208,17 @@ const { validator, isLastLesson, hasNextChapter, lesson, chapter, next, title } 
     <interactive-exercise isLastLesson={isLastLesson} hasNextChapter={hasNextChapter} next={next} chapter={chapter} lesson={lesson} validator={validator}></interactive-exercise>
   </div>
   <script type="module" src="./interactive-exercise.js"></script>
-  <script>
-    if('serviceWorker' in navigator) {
+  <script define:vars={{ prod }}>
+    if(prod && 'serviceWorker' in navigator) {
       let refreshing = false;
 
-      // navigator.serviceWorker.register('./sw.js')
-      //   .then(() => {
-      //     console.log('sw registered');
-      //   })
-      //   .catch(() => {
-      //     console.log('failed to register sw');
-      //   });
+      navigator.serviceWorker.register('./sw.js')
+        .then(() => {
+          console.log('sw registered');
+        })
+        .catch(() => {
+          console.log('failed to register sw');
+        });
 
       navigator.serviceWorker.addEventListener('controllerchange', () => {
         if (refreshing) return;

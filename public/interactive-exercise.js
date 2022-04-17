@@ -15,36 +15,38 @@
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */var F,q;class N extends A{constructor(){super(...arguments),this.renderOptions={host:this},this._$Dt=void 0}createRenderRoot(){var t,e;const i=super.createRenderRoot();return(t=(e=this.renderOptions).renderBefore)!==null&&t!==void 0||(e.renderBefore=i.firstChild),i}update(t){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Dt=Ut(e,this.renderRoot,this.renderOptions)}connectedCallback(){var t;super.connectedCallback(),(t=this._$Dt)===null||t===void 0||t.setConnected(!0)}disconnectedCallback(){var t;super.disconnectedCallback(),(t=this._$Dt)===null||t===void 0||t.setConnected(!1)}render(){return E}}N.finalized=!0,N._$litElement$=!0,(F=globalThis.litElementHydrateSupport)===null||F===void 0||F.call(globalThis,{LitElement:N});const vt=globalThis.litElementPolyfillSupport;vt==null||vt({LitElement:N}),((q=globalThis.litElementVersions)!==null&&q!==void 0?q:globalThis.litElementVersions=[]).push("3.2.0");function G(s){var t=typeof s;return s!=null&&(t=="object"||t=="function")}var kt=typeof global=="object"&&global&&global.Object===Object&&global,zt=kt,Bt=typeof self=="object"&&self&&self.Object===Object&&self,Dt=zt||Bt||Function("return this")(),$t=Dt,Wt=function(){return $t.Date.now()},J=Wt,Vt=/\s/;function Ft(s){for(var t=s.length;t--&&Vt.test(s.charAt(t)););return t}var qt=/^\s+/;function Gt(s){return s&&s.slice(0,Ft(s)+1).replace(qt,"")}var Jt=$t.Symbol,I=Jt,ft=Object.prototype,Kt=ft.hasOwnProperty,Zt=ft.toString,H=I?I.toStringTag:void 0;function Xt(s){var t=Kt.call(s,H),e=s[H];try{s[H]=void 0;var i=!0}catch(r){}var n=Zt.call(s);return i&&(t?s[H]=e:delete s[H]),n}var Qt=Object.prototype,Yt=Qt.toString;function te(s){return Yt.call(s)}var ee="[object Null]",ie="[object Undefined]",gt=I?I.toStringTag:void 0;function se(s){return s==null?s===void 0?ie:ee:gt&&gt in Object(s)?Xt(s):te(s)}function ne(s){return s!=null&&typeof s=="object"}var re="[object Symbol]";function oe(s){return typeof s=="symbol"||ne(s)&&se(s)==re}var _t=0/0,le=/^[-+]0x[0-9a-f]+$/i,ae=/^0b[01]+$/i,he=/^0o[0-7]+$/i,ce=parseInt;function mt(s){if(typeof s=="number")return s;if(oe(s))return _t;if(G(s)){var t=typeof s.valueOf=="function"?s.valueOf():s;s=G(t)?t+"":t}if(typeof s!="string")return s===0?s:+s;s=Gt(s);var e=ae.test(s);return e||he.test(s)?ce(s.slice(2),e?2:8):le.test(s)?_t:+s}var de="Expected a function",ue=Math.max,pe=Math.min;function ve(s,t,e){var i,n,r,o,a,l,h=0,$=!1,c=!1,d=!0;if(typeof s!="function")throw new TypeError(de);t=mt(t)||0,G(e)&&($=!!e.leading,c="maxWait"in e,r=c?ue(mt(e.maxWait)||0,t):r,d="trailing"in e?!!e.trailing:d);function v(u){var f=i,x=n;return i=n=void 0,h=u,o=s.apply(x,f),o}function m(u){return h=u,a=setTimeout(R,t),$?v(u):o}function y(u){var f=u-l,x=u-h,X=t-f;return c?pe(X,r-x):X}function K(u){var f=u-l,x=u-h;return l===void 0||f>=t||f<0||c&&x>=r}function R(){var u=J();if(K(u))return Z(u);a=setTimeout(R,y(u))}function Z(u){return a=void 0,d&&i?v(u):(i=n=void 0,o)}function bt(){a!==void 0&&clearTimeout(a),h=0,i=l=n=a=void 0}function St(){return a===void 0?o:Z(J())}function k(){var u=J(),f=K(u);if(i=arguments,n=this,l=u,f){if(a===void 0)return m(l);if(c)return clearTimeout(a),a=setTimeout(R,t),v(l)}return a===void 0&&(a=setTimeout(R,t)),o}return k.cancel=bt,k.flush=St,k}var $e=Object.defineProperty,fe=(s,t,e)=>t in s?$e(s,t,{enumerable:!0,configurable:!0,writable:!0,value:e}):s[t]=e,ge=(s,t,e)=>(fe(s,typeof t!="symbol"?t+"":t,e),e);function yt(s,t,e,i){return ve(()=>{const n=s.getModel().getValue(),r=t.createSourceFile("",n,t.ScriptTarget.ES2015,!0),o=e.map(({validate:a,title:l})=>{const h=_e(r,t,{},a);return{title:l,result:h}});i(o)},500)}function _e(s,t,e,i){let n=!1;function r(o){let a=i({ts:t,node:o,context:e});a&&(n=a),t.forEachChild(o,r)}return r(s),n}const me=import("./monaco-editor.js"),ye=import("./typescript.js");class At extends N{createRenderRoot(){return this}constructor(){super(),this.isLastLesson=!1,this.hasNextChapter=!1,this.lesson="0",this.chapter="0",this.next="",this.results=[],this.resources=[],this.validator="./validators.js"}async connectedCallback(){super.connectedCallback(),this.innerHTML="";const t=import(this.validator).then(e=>e);Promise.all([me,ye,t]).then(([{monaco:e},{ts:i},{initial:n,validators:r,resources:o}])=>{this.resources=o;const a=e.editor.create(this.querySelector("#editor"),{value:n,language:"javascript",scrollBeyondLastLine:!1,lineNumbers:"off",minimap:{enabled:!1},fontSize:15});a.updateOptions({tabSize:2}),a.getModel().onDidChangeContent(yt(a,i,r,l=>{this.results=l})),yt(a,i,r,l=>{this.results=l})()})}render(){var t;const e=this.results.length&&this.results.every(({result:n})=>n);let i="";return this.isLastLesson||(i=`/sw/chapter/${this.chapter}/lesson/${parseInt(this.lesson)+1}`),this.isLastLesson&&this.hasNextChapter&&(i=`/sw/chapter/${parseInt(this.chapter)+1}/lesson/0`),U`
-      <div id="editor"></div>
-      <div id="results">
-        <div class="result-list">
-          <h1>Tasks:</h1>
-          <ul>
-            ${this.results.map(({title:n,result:r})=>U`<li><span class="result-list-icon">${r?"\u2705":"\u274C"}</span> ${n}</li>`)}
-          </ul>
-          <p>${e?"All done!":"Good luck!"}</p>
-        </div>
-        
-        ${((t=this.resources)==null?void 0:t.length)>0?U`
-            <div class="resources">
-              <h1>Resources</h1>
-              <div class="resources-list">
-                ${this.resources.map(({title:n,url:r})=>U`<a target="_blank" href="${r}">${n}</a>`)}
-              </div>
-            </div>
-          `:""}
 
-        ${e?U`
-            <a class="next-anchor" href="${i}">
-              <div class="next">
-                <div class="next-header">
-                  <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 0 24 24" width="40px"><g><rect fill="none" height="24" width="24"/></g><g><path d="M22,12c0-5.52-4.48-10-10-10C6.48,2,2,6.48,2,12s4.48,10,10,10C17.52,22,22,17.52,22,12z M4,12c0-4.42,3.58-8,8-8 c4.42,0,8,3.58,8,8s-3.58,8-8,8C7.58,20,4,16.42,4,12z M16,12l-4,4l-1.41-1.41L12.17,13H8v-2h4.17l-1.59-1.59L12,8L16,12z"/></g></svg>
-                  <h1>Success!</h1>
+        <div id="editor"></div>
+        <div id="results">
+          <div class="result-list">
+            <h1>Tasks:</h1>
+            <ul>
+              ${this.results.map(({title:n,result:r})=>U`<li><span class="result-list-icon">${r?"\u2705":"\u274C"}</span> ${n}</li>`)}
+            </ul>
+            <p>${e?"All done!":"Good luck!"}</p>
+          </div>
+          
+          ${((t=this.resources)==null?void 0:t.length)>0?U`
+              <div class="resources">
+                <h1>Resources</h1>
+                <div class="resources-list">
+                  ${this.resources.map(({title:n,url:r})=>U`<a target="_blank" href="${r}">${n}</a>`)}
                 </div>
-                <p class="up-next">Up next:</p>
-                <p class="up-next-title">${this.next}</p>
               </div>
-            </a>
-          `:""}
-      </div>
+            `:""}
+
+          ${e?U`
+              <a class="next-anchor" href="${i}">
+                <div class="next">
+                  <div class="next-header">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 0 24 24" width="40px"><g><rect fill="none" height="24" width="24"/></g><g><path d="M22,12c0-5.52-4.48-10-10-10C6.48,2,2,6.48,2,12s4.48,10,10,10C17.52,22,22,17.52,22,12z M4,12c0-4.42,3.58-8,8-8 c4.42,0,8,3.58,8,8s-3.58,8-8,8C7.58,20,4,16.42,4,12z M16,12l-4,4l-1.41-1.41L12.17,13H8v-2h4.17l-1.59-1.59L12,8L16,12z"/></g></svg>
+                    <h1>Success!</h1>
+                  </div>
+                  <p class="up-next">Up next:</p>
+                  <p class="up-next-title">${this.next}</p>
+                </div>
+              </a>
+            `:""}
+        </div>
+
     `}}ge(At,"properties",{isLastLesson:{type:Boolean},hasNextChapter:{type:Boolean},results:{type:Array},next:{type:String},lesson:{type:String},chapter:{type:String},validator:{type:String},resources:{type:Array}}),customElements.define("interactive-exercise",At);

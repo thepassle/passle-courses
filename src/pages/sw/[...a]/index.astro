@@ -1,6 +1,7 @@
 ---
 import { Markdown } from 'astro/components';
 import Header from '../../../components/Header.astro';
+import Quiz from '../../../components/Quiz.astro';
 import Sidebar from '../../../components/Sidebar.astro';
 import InteractiveExercise from '../../../layouts/InteractiveExercise.astro';
 import Theory from '../../../layouts/Theory.astro';
@@ -42,29 +43,47 @@ if(currentLesson?.markdownLocation) {
 }
 
 ---
-{currentLesson?.markdownLocation
-  ? <Theory 
-      title={currentLesson.title} 
-      hasNextChapter={!!nextChapter} 
-      isLastLesson={!nextLesson} 
-      next={nextLesson?.title ?? nextChapter?.title ?? ''} 
-      chapter={chapter} 
-      lesson={lesson}
-    >
-      <Header slot="header" user={user}/>
-      <Sidebar slot="sidebar" chapter={chapter} lesson={lesson} courseIndex={courseIndex}/>
-      <Markdown slot="content" content={markdown} />
-    </Theory>
-  : <InteractiveExercise 
-      title={currentLesson.title} 
-      next={nextLesson?.title ?? nextChapter?.title ?? ''} 
-      hasNextChapter={!!nextChapter} 
-      isLastLesson={!nextLesson} 
-      chapter={chapter} 
-      lesson={lesson} 
-      validator={currentLesson.validatorsLocation}
-    >
-      <Header slot="header" user={user}/>
-      <Sidebar slot="sidebar" chapter={chapter} lesson={lesson} courseIndex={courseIndex}/>
-    </InteractiveExercise>
-}
+{currentLesson?.kind === 'theory' && (
+  <Theory 
+    title={currentLesson.title} 
+    hasNextChapter={!!nextChapter} 
+    isLastLesson={!nextLesson} 
+    next={nextLesson?.title ?? nextChapter?.title ?? ''} 
+    chapter={chapter} 
+    lesson={lesson}
+  >
+    <Header slot="header" user={user}/>
+    <Sidebar slot="sidebar" title={'Mental Gymnastics of Service Worker'} chapter={chapter} lesson={lesson} courseIndex={courseIndex}/>
+    <Markdown slot="content" content={markdown} />
+  </Theory>
+)}
+
+{currentLesson?.kind === 'quiz' && (
+  <Theory 
+    title={currentLesson.title} 
+    hasNextChapter={!!nextChapter} 
+    isLastLesson={!nextLesson} 
+    next={nextLesson?.title ?? nextChapter?.title ?? ''} 
+    chapter={chapter} 
+    lesson={lesson}
+  >
+    <Header slot="header" user={user}/>
+    <Sidebar slot="sidebar" title={'Mental Gymnastics of Service Worker'} chapter={chapter} lesson={lesson} courseIndex={courseIndex}/>
+    <Quiz title={currentLesson.title} questions={currentLesson.questions} slot="content"/>
+  </Theory>
+)}
+
+{currentLesson?.kind === 'exercise' && (
+  <InteractiveExercise 
+    title={currentLesson.title} 
+    next={nextLesson?.title ?? nextChapter?.title ?? ''} 
+    hasNextChapter={!!nextChapter} 
+    isLastLesson={!nextLesson} 
+    chapter={chapter} 
+    lesson={lesson} 
+    validator={currentLesson.validatorsLocation}
+  >
+    <Header slot="header" user={user}/>
+    <Sidebar slot="sidebar" title={'Mental Gymnastics of Service Worker'} chapter={chapter} lesson={lesson} courseIndex={courseIndex}/>
+  </InteractiveExercise>
+)}

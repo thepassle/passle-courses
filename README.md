@@ -509,6 +509,21 @@ self.addEventListener('install', (event) => {
 });
 ```
 
+## Server rendered web components?!
+
+I also added some interactivity in the form of quizzes, by using server rendered web components. Using Astro's SSR integration for Lit made this super easy:
+
+```js
+import lit from '@astrojs/lit';
+
+export default {
+  // ...
+  integrations: [lit()],
+}
+```
+
+![quiz](./blog/quiz.gif)
+
 ## Conclusion
 
 Working with Astro SSR has a been a blast. Being mostly a frontend developer, it was nice to get out of my comfort zone a little bit and do more server-side work. As an added nice result, I found that I barely ended up using any client side JS for the most part of the site, but just HTML and CSS. Obviously the interactive editor uses some client side JS, but thats only a small part of the application. Additionally, Astro SSR was very straightforward to pick up, start using, and be productive with. Before I realized it, I had half the course selling site put together, and I'm really glad that I did. 
