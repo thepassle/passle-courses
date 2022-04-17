@@ -524,6 +524,17 @@ export default {
 
 ![quiz](./blog/quiz.gif)
 
+## Admin Panel
+
+Finally, I created an admin panel to easily be able to see how many active subscriptions there are, as well as get the status and information for a user's subscriptions and payments.
+
+To do this, I again made use of dynamic routing, e.g.:
+- `/admin/index.astro` -> lists users, with links to specific users
+- `/admin/[user].astro` -> user details
+
+![admin](./blog/admin.png)
+![admin-details](./blog/admin-details.png)
+
 ## Conclusion
 
 Working with Astro SSR has a been a blast. Being mostly a frontend developer, it was nice to get out of my comfort zone a little bit and do more server-side work. As an added nice result, I found that I barely ended up using any client side JS for the most part of the site, but just HTML and CSS. Obviously the interactive editor uses some client side JS, but thats only a small part of the application. Additionally, Astro SSR was very straightforward to pick up, start using, and be productive with. Before I realized it, I had half the course selling site put together, and I'm really glad that I did. 
