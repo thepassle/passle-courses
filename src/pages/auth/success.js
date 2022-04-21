@@ -37,12 +37,13 @@ export async function post(_, req) {
       email: payload.email,
       picture: payload.picture,
       subscriptionActive: false,
+      admin: false
     }
   );
   
   const active = !!user?.subscriptionActive;
   
-  const jwt = createToken({ ...payload, id: payload.sub, active });
+  const jwt = createToken({ ...payload, id: payload.sub, admin: user?.admin, active });
 
   /** Set headers */
   const headers = createHeaders({jwt, location: '/'});

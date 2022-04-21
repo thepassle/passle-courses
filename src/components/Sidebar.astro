@@ -1,6 +1,6 @@
 ---
 import chevron from '../assets/chevron-right.svg';
-const { chapter, lesson, courseIndex, title } = Astro.props;
+const { subscribed, chapter, lesson, courseIndex, title } = Astro.props;
 ---
 <style>
   *:focus {
@@ -11,6 +11,7 @@ const { chapter, lesson, courseIndex, title } = Astro.props;
   }
 
   .sidebar {
+    overflow: auto;
     z-index: 3;
     font-weight: 300;
     flex-shrink: 0;
@@ -65,17 +66,29 @@ const { chapter, lesson, courseIndex, title } = Astro.props;
     background-color: #f5f5f5;
   }
 
-
-  .sidebar-link:hover {
-    background-color: #f5f5f5;
-  }
-
   .active-chapter,
   .current {
     border-radius: 4px;
     font-weight: 500;
     background-color: #f5f5f5;
     border-left: solid 5px rgb(0, 82, 255);
+  }
+
+  .active-chapter {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+  }
+
+  details {
+    background: #f5f5f5;
+  }
+
+  summary > li {
+    background: white
+  }
+
+  summary > li:hover {
+    background: #f5f5f5;
   }
 
   summary {
@@ -105,6 +118,8 @@ const { chapter, lesson, courseIndex, title } = Astro.props;
   }
 
   .lessons {
+    padding-top: 15px;
+    padding-bottom: 15px;
     list-style: none;
     counter-reset: my-awesome-counter;
   }
@@ -128,7 +143,12 @@ const { chapter, lesson, courseIndex, title } = Astro.props;
   }
 
   .current-lesson {
+    color: rgb(0,82,255);
     font-weight: 500;
+  }
+
+  .locked {
+    margin-left: auto;
   }
 </style>
 <div class="sidebar">
@@ -140,7 +160,7 @@ const { chapter, lesson, courseIndex, title } = Astro.props;
           <summary>
             <li class={parseInt(chapter) === i ? 'active-chapter' : ''}>
               <img class="chevron" src={chevron} alt=""/>
-              {c.title}
+              {c.title} {!subscribed && i > 0 && (<svg class="locked" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><g fill="none"><path d="M0 0h24v24H0V0z"/><path d="M0 0h24v24H0V0z" opacity=".87"/></g><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/></svg>)}
             </li>
           </summary>
           <ul class="lessons">

@@ -1,7 +1,7 @@
 import { parse } from 'lightcookie';
 import jwt from 'jsonwebtoken';
 
-export const createToken = ({id, name, email, active, picture}) => jwt.sign({id, name, email, active, picture}, import.meta.env.JWT_SECRET, {expiresIn: '7d'});
+export const createToken = ({id, name, admin, email, active, picture}) => jwt.sign({id, name, admin, email, active, picture}, import.meta.env.JWT_SECRET, {expiresIn: '7d'});
 
 export async function isLoggedIn(req) {
 	let authed = false;
@@ -19,6 +19,7 @@ export async function isLoggedIn(req) {
             picture: decoded.picture,
             active: decoded.active,
             id: decoded.id,
+            admin: decoded.admin
           }
           authed = true;
         }

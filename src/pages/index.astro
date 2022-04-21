@@ -218,6 +218,27 @@ const user = await isLoggedIn(Astro.request);
 		}
 	}
 
+	.try {
+		display: block;
+		text-align: center;
+		padding: 6px;
+	}
+
+	.course-cards a.try:active,
+	.course-cards a.try:focus {
+		padding: 6px;
+		transform: none;
+	}
+
+	.course-cards a.try:hover {
+		transform: none;
+		box-shadow: none;
+		outline: none;
+	}
+
+	.try:visited {
+		color: rgb(0, 82,255);
+	}
 </style>
 <Main user={user}>
 	<div class="section courses">
@@ -234,6 +255,7 @@ const user = await isLoggedIn(Astro.request);
 					: <div>
 							<h2>The Mental Gymnastics<br/>of Service Worker</h2>
 							<p>Learn everything there is to know about Service Workers, and become a true master of offline first!</p>	
+							<a class="try" href="/sw/chapter/0/lesson/0">Try it out for free!</a>
 						</div>
 				}
 			</div>

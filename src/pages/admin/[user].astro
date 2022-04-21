@@ -1,0 +1,225 @@
+---
+import { Authorization, isLoggedIn } from '../utils/auth.js';
+import { User } from '../db/User.js';
+import Main from '../../layouts/Main.astro';
+import CanvasBg from '../../layouts/CanvasBg.astro';
+
+const user = await isLoggedIn(Astro.request);
+
+if(!user.admin) {
+	return Astro.redirect('/');
+}
+
+const mongoUser = await User.findOne({id: Astro.params.user });
+
+let mollieCustomer;
+let payments;
+if(!!mongoUser?.mollieId) {
+  mollieCustomer = await fetch(`https://api.mollie.com/v2/customers/${mongoUser.mollieId}`,
+    { headers: {...Authorization} }
+  ).then(r => r.json());
+
+  payments = await fetch(`https://api.mollie.com/v2/customers/${mongoUser.mollieId}/payments`,
+    { headers: {...Authorization} }
+  ).then(r => r.json());
+}
+
+let subscription;
+if(!!mongoUser?.subscriptionId) {
+  subscription = await fetch(`https://api.mollie.com/v2/customers/${mongoUser.mollieId}/subscriptions/${mongoUser.subscriptionId}`,
+    { headers: {...Authorization} }
+  ).then(r => r.json());
+}
+---
+<style>
+	h1 {
+		font-size: 26px;
+	}
+
+	h1 ~ h1 {
+		margin-top: 30px;
+	}
+
+
+	.row {
+		display: flex;
+	}
+
+	.row dt {
+		font-weight: 500;
+	}
+
+	.row dt {
+		flex-basis: 50%;
+	}
+
+  img {
+    object-cover: fit;
+    border-radius: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 30px;
+  }
+
+  .back {
+    margin-bottom: 30px;
+    display: block;
+  }
+
+  .admin {
+    background: rgb(233,233,233);
+    padding-bottom: 120px;
+  }
+  .status {
+    padding-left: 6px;
+    padding-right: 6px;
+    font-weight: 500;
+    border-radius: 4px;
+  }
+
+  .active, .paid {
+    background: #4cd964;
+    color: white;
+  }
+
+  .open,
+  .pending {
+    background: #fcb100;
+    color: white;
+  }
+
+  .canceled,
+  .completed,
+  .expired,
+  .suspended {
+    background: #b3b3b3;
+    color: white;
+  }
+
+  .failed {
+    background: rgb(217, 76, 128);
+    color: white;
+  }
+</style>
+
+<Main title="Admin" user={user}>
+	<CanvasBg>
+    <div class="admin">
+      <a class="back" href="/admin">Back to Admin</a>
+      <h1>User</h1>
+      <div class="card">
+        <img src={mongoUser?.picture} alt=""/>
+        <dl>
+          <div class="row">
+            <dt>id</dt>
+            <dd>{mongoUser?.id}</dd>
+          </div>
+          <div class="row">
+            <dt>username</dt>
+            <dd>{mongoUser?.username}</dd>
+          </div>
+          <div class="row">
+            <dt>email</dt>
+            <dd>{mongoUser?.email}</dd>
+          </div>
+          <div class="row">
+            <dt>subscriptionActive</dt>
+            <dd>{mongoUser?.subscriptionActive}</dd>
+          </div>
+          <div class="row">
+            <dt>mollieId</dt>
+            <dd>{mongoUser?.mollieId}</dd>
+          </div>
+
+          <div class="row">
+            <dt>subscriptionId</dt>
+            <dd>{mongoUser?.subscriptionId}</dd>
+          </div>
+          <div class="row">
+            <dt>admin</dt>
+            <dd>{mongoUser?.admin}</dd>
+          </div>
+        </dl>
+      </div>
+
+      {mongoUser?.mollieId && mollieCustomer && (
+        <h1>Mollie User</h1>
+        <div class="card">
+          <div class="row">
+            <dt>createdAt</dt>
+            <dd>{new Date(mollieCustomer?.createdAt).toUTCString()}</dd>
+          </div>
+        </div>
+      )}
+      
+      {mongoUser?.subscriptionId && subscription && (
+        <h1>Subscription</h1>
+        <div class="card">
+          <div class="row">
+            <dt>status</dt>
+            <dd><span class={`${subscription?.status} status`}>{subscription?.status}</span></dd>
+          </div>
+          <div class="row">
+            <dt>createdAt</dt>
+            <dd>{new Date(subscription?.createdAt).toUTCString()}</dd>
+          </div>
+          <div class="row">
+            <dt>startDate</dt>
+            <dd>{new Date(subscription?.startDate).toUTCString()}</dd>
+          </div>
+          <div class="row">
+            <dt>nextPaymentDate</dt>
+            <dd>{new Date(subscription?.nextPaymentDate).toUTCString()}</dd>
+          </div>
+          <div class="row">
+            <dt>description</dt>
+            <dd>{subscription?.description}</dd>
+          </div>
+          <div class="row">
+            <dt>amount</dt>
+            <dd>{subscription?.amount?.currency} {subscription?.amount?.value}</dd>
+          </div>
+        </div>
+      )}
+
+      {mongoUser?.mollieId && payments?._embedded?.payments?.length > 0 && (
+        <h1>Payments</h1>
+          {payments._embedded.payments.map(payment => (<div class="card">
+            <div class="row">
+              <dt>resource</dt>
+              <dd>{payment?.resource}</dd>
+            </div>
+            <div class="row">
+              <dt>createdAt</dt>
+              <dd>{new Date(payment?.createdAt).toUTCString()}</dd>
+            </div>
+            <div class="row">
+              <dt>paidAt</dt>
+              <dd>{payment?.paidAt && new Date(payment?.paidAt).toUTCString()}</dd>
+            </div>
+            <div class="row">
+              <dt>status</dt>
+              <dd><span class={`${payment?.status} status`}>{payment?.status}</span></dd>
+            </div>
+            <div class="row">
+              <dt>description</dt>
+              <dd>{payment?.description}</dd>
+            </div>
+            <div class="row">
+              <dt>method</dt>
+              <dd>{payment?.method}</dd>
+            </div>
+            <div class="row">
+              <dt>sequenceType</dt>
+              <dd>{payment?.sequenceType}</dd>
+            </div>
+            <div class="row">
+              <dt>amount</dt>
+              <dd>{payment?.amount?.currency} {payment?.amount?.value}</dd>
+            </div>
+          </div>))}
+      )}
+    </div>
+	</CanvasBg>
+</Main>

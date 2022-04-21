@@ -104,6 +104,7 @@ export async function post(_, req) {
                     value: '10.00',
                     currency: 'EUR',
                   },
+                  startDate: new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('nl-NL', {year: 'numeric', month: '2-digit', day: '2-digit'}),
                   interval: '1 month',
                   description: import.meta.env.MOLLIE_SUBSCRIPTION_DESCRIPTION,
                   ...(import.meta.env.ENV !== 'dev' ? { webhookUrl: `${import.meta.env.APP_URL}/mollie/webhook` } : {}),

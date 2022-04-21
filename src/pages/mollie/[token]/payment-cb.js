@@ -21,6 +21,7 @@ export async function get({token}, req) {
 			email: mongoUser.email,
 			picture: mongoUser.picture,
 			id: mongoUser.id,
+			admin: mongoUser.admin,
 			active: true
 		});
 	

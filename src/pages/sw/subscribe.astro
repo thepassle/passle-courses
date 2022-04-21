@@ -259,11 +259,26 @@ const user = await isLoggedIn(Astro.request);
 		}
   }
 
+  .notification {
+    padding: 10px;
+    border: 1px solid hsl(206, 74%, 54%);
+    border-radius: 4px;
+    background: hsl(206, 74%, 90%);
+  }
+
 </style>
 <Main title="Subscribe" user={user}>
   <div class="section interactive">
     <h1 class="big-title">Learn <br/>Service Worker</h1>
     <img loading="lazy" class="interactive-img" src={interactive} alt=""/>
+  </div>
+
+  <div class="section sub">
+    <h1 class="big-title">Try for free!</h1>
+    <div class="sub-card card">
+      <p>Try the first chapter of the course out for free.</p>
+      <a class="subscribe linkbutton-secondary outline" href="/sw/chapter/0/lesson/0">Try it out</a>  
+    </div>
   </div>
 
   <div class="section lifecycle">
@@ -298,6 +313,7 @@ const user = await isLoggedIn(Astro.request);
     <div class="sub-card card">
       <h2>Pricing</h2>
       <p>For a measly <strong>€10,00</strong> a month (21% VAT incl.), you'll have access to your favourite course.</p>
+      <p class="notification">For demoing purposes, this will take you to the sandbox payment environment. <br/>You can try it out for free, and then check out the interactive course part of this site.</p>
       {user.authed
         ? <a class="subscribe linkbutton-secondary outline" href="/mollie/pay">Subscribe</a>
         : <div>

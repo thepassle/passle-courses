@@ -39,6 +39,7 @@ export async function get(_, req) {
           email: mongoUser.email,
           picture: mongoUser.picture,
           id: mongoUser.id,
+          admin: mongoUser.admin,
           active: false
         });
 

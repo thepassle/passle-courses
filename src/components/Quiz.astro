@@ -1,13 +1,18 @@
 ---
 import './quiz-question.js';
 import './quiz-next-card.js';
-const { questions, title } = Astro.props; 
+const { next, nextLink, questions, title } = Astro.props; 
 ---
 <h1>{title}</h1>
 <div id="quiz-questions">
+
   {questions.map((question, questionId) => (
-    <quiz-question answer={String(question.answer)} client:visible>
-      <h2 slot="question">{question.question}</h2>
+    <quiz-question 
+      question={question.question} 
+      explanation={question.explanation} 
+      answer={String(question.answer)} 
+      client:visible
+    >
       <div slot="options" class="options-list">
         {question.options.map((option, optionId) => (
           <div class="option">
@@ -18,7 +23,11 @@ const { questions, title } = Astro.props;
       </div>
     </quiz-question>
   ))}
-  <quiz-next-card client:visible></quiz-next-card>
+
+
+  <quiz-next-card nextLink={nextLink} next={next} client:idle>
+    <p>🎉 You've answered all questions correctly. You can now move on to the next section.</p>
+  </quiz-next-card>
 </div>
 
 <script is:inline>
@@ -28,6 +37,10 @@ const { questions, title } = Astro.props;
     const allDone = [...questions].every(question => question.answered);
 
     const nextCard = document.querySelector('quiz-next-card');
-    nextCard.show = allDone;
+    if (allDone) {
+      nextCard.setAttribute('show', '');
+    } else {
+      nextCard.removeAttribute('show');
+    }
   });
 </script>

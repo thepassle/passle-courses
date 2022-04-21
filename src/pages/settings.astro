@@ -1,11 +1,24 @@
 ---
-import { isLoggedIn } from './utils/auth.js';
+import mongoose from 'mongoose';
+import { isLoggedIn, Authorization } from './utils/auth.js';
+import { User } from './db/User.js';
 import Main from '../layouts/Main.astro';
 import CanvasBg from '../layouts/CanvasBg.astro';
 
 const user = await isLoggedIn(Astro.request);
 if(!user.authed) {
 	return Astro.redirect('/');
+}
+
+let subscription;
+if(!!user?.active) {
+	try {
+		await mongoose.connect(import.meta.env.MONGODB_ADDON_URI);
+	} catch {}
+	const mongoUser = await User.findOne({id: user.id});
+  subscription = await fetch(`https://api.mollie.com/v2/customers/${mongoUser.mollieId}/subscriptions/${mongoUser.subscriptionId}`,
+    { headers: {...Authorization} }
+  ).then(r => r.json());
 }
 ---
 <style>
@@ -71,6 +84,49 @@ if(!user.authed) {
 			flex-basis: 20%;
 		}
 	}
+
+	.status {
+    padding-left: 6px;
+    padding-right: 6px;
+    font-weight: 500;
+    border-radius: 4px;
+  }
+
+  .active, .paid {
+    background: #4cd964;
+    color: white;
+  }
+
+  .open,
+  .pending {
+    background: #fcb100;
+    color: white;
+  }
+
+  .canceled,
+  .completed,
+  .expired,
+  .suspended {
+    background: #b3b3b3;
+    color: white;
+  }
+
+  .failed {
+    background: rgb(217, 76, 128);
+    color: white;
+  }
+
+	.row {
+		display: flex;
+	}
+
+	.row dt {
+		font-weight: 500;
+	}
+
+	.row dt {
+		flex-basis: 50%;
+	}
 </style>
 
 <Main title="Settings" user={user}>
@@ -93,7 +149,36 @@ if(!user.authed) {
 		<div class="card">
 			{user.active 
 				? <div>
-						<h2>Subscription</h2>
+						<h2>Mental Gymnastics of Service Worker</h2>
+
+
+						<div class="row">
+							<dt>status</dt>
+							<dd><span class={`${subscription?.status} status`}>{subscription?.status}</span></dd>
+						</div>
+						<div class="row">
+							<dt>createdAt</dt>
+							<dd>{new Date(subscription?.createdAt).toUTCString()}</dd>
+						</div>
+						<div class="row">
+							<dt>startDate</dt>
+							<dd>{new Date(subscription?.startDate).toUTCString()}</dd>
+						</div>
+						<div class="row">
+							<dt>nextPaymentDate</dt>
+							<dd>{new Date(subscription?.nextPaymentDate).toUTCString()}</dd>
+						</div>
+						<div class="row">
+							<dt>description</dt>
+							<dd>{subscription?.description}</dd>
+						</div>
+						<div class="row">
+							<dt>amount</dt>
+							<dd>{subscription?.amount?.currency} {subscription?.amount?.value}</dd>
+						</div>
+						
+						<br/>
+
 						<p>You are subscribed. Would you like to cancel?</p>
 						<a class="linkbutton-secondary outline" href="/mollie/cancel-subscription">Cancel</a>
 					</div>

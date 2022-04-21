@@ -5,7 +5,7 @@ export const courseIndex = [
     lessons: [
       {
         kind: 'theory',
-        title: 'Introduction',
+        title: 'Theory: Introduction',
         markdownLocation: './sw/theory/introduction.md'
       },
       {
@@ -13,6 +13,33 @@ export const courseIndex = [
         title: 'Exercise: Registering',
         validatorsLocation: './sw/registering/index.js'
       },
+      {
+        kind: 'quiz',
+        title: 'Quiz: Wrapping up',
+        questions: [
+          {
+            question: 'During which lifecycle event should you be precaching assets?',
+            options: [
+              'installing',
+              'activating',
+              'activated',
+              'redundant',
+            ],
+            answer: 0,
+            explanation: 'Exactly! Good job'
+          },
+          {
+            question: 'During which lifecycle event should you be cleaning up old caches?',
+            options: [
+              'parsed',
+              'redundant',
+              'activating',
+              'installing'
+            ],
+            answer: 2
+          },
+        ]
+      }
     ]
   },
   // Chapter 1
@@ -21,7 +48,7 @@ export const courseIndex = [
     lessons: [
       {
         kind: 'theory',
-        title: 'Introduction to caching strategies',
+        title: 'Theory: Introduction to caching strategies',
         markdownLocation: './sw/theory/caching.md'
       },
       {
@@ -39,7 +66,8 @@ export const courseIndex = [
               'For content that updates frequently, like articles',
               'Resources where having the latest version is not essential, like avatars'
             ],
-            answer: 0
+            answer: 0,
+            explanation: 'You should only use a cache first strategy for resources that are considered dependencies.'
           },
           {
             question: 'When should you use a cache only strategy?',
@@ -59,7 +87,7 @@ export const courseIndex = [
     lessons: [
       {
         kind: 'theory',
-        title: 'Service worker updates',
+        title: 'Theory: Service worker updates',
         markdownLocation: './sw/theory/caching.md'
       }
     ]
@@ -69,12 +97,12 @@ export const courseIndex = [
     lessons: [
       {
         kind: 'theory',
-        title: 'Introduction to updates',
+        title: 'Theory: Introduction to updates',
         markdownLocation: './sw/theory/caching.md'
       },
       {
         kind: 'theory',
-        title: 'Clients claim',
+        title: 'Theory: Clients claim',
         markdownLocation: './sw/theory/outro.md'
       }
     ]
@@ -84,7 +112,7 @@ export const courseIndex = [
     lessons: [
       {
         kind: 'theory',
-        title: 'Skip waiting',
+        title: 'Theory: Skip waiting',
         markdownLocation: './sw/theory/caching.md'
       }
     ]

@@ -3,20 +3,27 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview"
-  },
-  "devDependencies": {
-    "@astrojs/netlify": "^0.2.3",
-    "astro": "^1.0.0-beta.8",
-    "vite-plugin-commonjs": "^0.2.6"
+    "start": "astro dev --experimental-integrations",
+    "build": "node scripts/prepare-md.js && astro build --experimental-integrations",
+    "preview": "astro preview",
+    "deploy:prod": "npm run build && netlify deploy --prod --dir=netlify"
   },
   "dependencies": {
+    "@astrojs/lit": "^0.1.1",
+    "@astrojs/netlify": "^0.2.3",
+    "@webcomponents/template-shadowroot": "^0.1.0",
+    "astro": "^1.0.0-beta.11",
+    "custom-elements-ssr": "^0.0.8",
     "google-auth-library": "^7.14.1",
     "jsonwebtoken": "^8.5.1",
     "lightcookie": "^1.0.25",
+    "lit": "^2.2.2",
     "mongoose": "^6.2.10",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "vite-plugin-commonjs": "^0.2.6"
+  },
+  "devDependencies": {
+    "markdown-it": "^12.3.2",
+    "shiki": "^0.10.1"
   }
 }
