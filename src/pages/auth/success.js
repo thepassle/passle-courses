@@ -3,15 +3,8 @@ import mongoose from 'mongoose';
 import { User } from '../db/User.js';
 import { createToken, createHeaders } from '../utils/auth.js';
 
-const CLIENT_ID=import.meta.env.SIGN_IN_WITH_GOOGLE_CLIENT_ID;
+const CLIENT_ID = import.meta.env.SIGN_IN_WITH_GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(CLIENT_ID);
-
-export function get() {
-  return new Response(JSON.stringify({foo: 'bar'}), {
-    status: 200,
-
-  });
-}
 
 export async function post(_, req) {
   const body = await req.text();

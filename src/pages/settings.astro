@@ -120,6 +120,10 @@ if(!!user?.active) {
 		display: flex;
 	}
 
+	.admin {
+		margin-left: 12px;
+	}
+
 	.row dt {
 		font-weight: 500;
 	}
@@ -190,5 +194,6 @@ if(!!user?.active) {
 			}
 		</div>
 		<a class="linkbutton-main" href="/auth/logout">Sign out</a>
+		{!!user?.admin && (<a class="admin linkbutton-secondary outline" href="/admin/">Admin</a>)}
 	</CanvasBg>
 </Main>

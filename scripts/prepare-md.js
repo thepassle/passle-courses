@@ -17,7 +17,8 @@ shiki.getHighlighter({
 
   fs.readdirSync(`${process.cwd()}/theory`).forEach(file => {
     const f = fs.readFileSync(`${process.cwd()}/theory/${file}`, 'utf-8');
-    const html = md.render(f)
+    let html = md.render(f);
+    html = html.replaceAll('<img', '<img loading="lazy"')
     fs.writeFileSync(`${process.cwd()}/public/sw/theory/${file}`, html);
   });
 });

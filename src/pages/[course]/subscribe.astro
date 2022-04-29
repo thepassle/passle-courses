@@ -1,0 +1,328 @@
+---
+import { isLoggedIn } from '../utils/auth.js';
+import Main from '../../layouts/Main.astro';
+import installing from '../../assets/installing4.png';
+import lifecycle from '../../assets/lifecycle11.png';
+import interactive from '../../assets/demo_interactive_latest.gif';
+import clientsClaim from '../../assets/clients-claim5.png';
+
+const user = await isLoggedIn(Astro.request);
+---
+<style>
+  .learn {
+    text-align: center;
+    font-weight: 800;
+    font-size: 60px;
+    line-height: 58px;
+    padding-top: 40px;
+  }
+
+  .big-title {
+    text-align: center;
+    font-weight: 800;
+    font-size: 60px;
+    line-height: 58px;
+    padding-top: 40px;
+    padding-bottom: 20px;
+  }
+
+  @media (max-width: 800px) {
+		.big-title {
+			font-size: 35px;
+      line-height: 37px;
+			padding-top: 20px;
+			padding-bottom: 30px;
+		}
+	}
+
+
+  .section {
+    /* height: calc(100vh - 64px);
+    min-height: calc(900px - 64px); */
+  }
+
+  @media (max-width: 800px) {
+		.section {
+      max-height: none;
+      min-height: auto;
+      height: auto;
+		}
+	}
+
+  .card {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .subscribe {
+    max-width: 40%;
+    padding-top: 12px;
+    padding-bottom: 12px;
+
+    display: block;
+    text-align: center;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    animation: pulse 1.5s infinite;
+  }
+
+
+  .subscribe:focus,
+  .subscribe:hover,
+  .subscribe:active{
+    animation: none;
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: rgb(0, 82, 255) 0px 0px 8px, rgb(0, 82, 255) 0px 0px 2px;
+    }
+    50% {
+      box-shadow: rgb(0, 82, 255) 0px 0px 0px, rgb(0, 82, 255) 0px 0px 0px;
+    }
+    100% {
+      box-shadow: rgb(0, 82, 255) 0px 0px 8px, rgb(0, 82, 255) 0px 0px 2px;
+    }
+  }
+
+  strong {
+    font-weight: 500;
+  }
+
+  .sub p {
+    margin-bottom: 20px;
+  }
+
+  .sub {
+    height: auto;
+    min-height: auto;
+  }
+
+  .sub-card {
+    margin-top: 20px;
+    margin-bottom: 140px;
+  }
+
+  h1 { 
+    margin-top: 30px;
+  }
+
+  img {
+    width: 60%;
+  }
+
+  @media(max-width: 800px) {
+    img {
+      width: 90%;
+    }
+  }
+
+  /**
+   * Lifecycle
+   */
+  .lifecycle {
+
+  }
+
+  .lifecycle-img {
+    width: 40%;
+    max-width: 300px;
+  }
+
+  .lifecycle-wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    margin-top: 60px;
+    margin-bottom: 60px;
+    flex-direction: row;
+    width: 70%;
+  }
+
+  .lifecycle-info {
+    margin-left: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  @media (max-width: 800px) {
+    .lifecycle-wrapper {
+      margin-top: 20px;
+      margin-bottom: 0px;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .lifecycle-img {
+      width: 60%;
+    }
+
+    .lifecycle-info {
+      margin-left: 0;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+  }
+
+
+  /**
+   * Updating
+   */
+  .updating {
+
+  }
+
+  .updating-wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    margin-top: 60px;
+    margin-bottom: 60px;
+    flex-direction: row;
+    width: 70%;
+  }
+
+  .updating-info {
+    margin-right: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .updating-img {
+    max-width: 700px;
+  }
+
+  @media (max-width: 800px) {
+    .updating-info {
+      margin-right: auto;
+      margin-left: auto;
+      width: 70%;
+    }
+    
+    .updating-wrapper {
+      margin-top: 20px;
+      margin-bottom: 40px;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+  }
+
+
+/**
+ * Interactive
+ */
+  .interactive img {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-bottom: 40px;
+  }
+
+  /**
+   * Installing
+   */
+  .installing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .installing-img {
+    max-width: 950px;
+    margin-bottom: 40px;
+  }
+
+  @media (max-width: 800px) {
+    .installing {
+    }
+  }
+
+
+
+
+
+
+  @media (max-width: 800px) {
+    .card {
+      width: calc(100% - 64px);
+    }
+
+		.learn {
+      font-size: 46px;
+      line-height: 46px;
+		}
+  }
+
+  .notification {
+    padding: 10px;
+    border: 1px solid hsl(206, 74%, 54%);
+    border-radius: 4px;
+    background: hsl(206, 74%, 90%);
+  }
+
+</style>
+<Main title="Subscribe" user={user}>
+  <div class="section interactive">
+    <h1 class="big-title">Learn <br/>Service Worker</h1>
+    <img loading="lazy" class="interactive-img" src={interactive} alt=""/>
+  </div>
+
+  <div class="section sub">
+    <h1 class="big-title">Try for free!</h1>
+    <div class="sub-card card">
+      <p>Try the first chapter of the course out for free.</p>
+      <a class="subscribe linkbutton-secondary outline" href="/sw/chapter/0/lesson/0">Try it out</a>  
+    </div>
+  </div>
+
+  <div class="section lifecycle">
+    <div class="lifecycle-wrapper">
+      <img loading="lazy" class="lifecycle-img" src={lifecycle} alt=""/>
+      <div class="lifecycle-info">
+        <h2>Detailed illustrations</h2>
+        <p>Learn everything there is to know about Service Workers via interactive exercises, and detailed graphs and illustrations</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section updating">
+    <h1 class="big-title">Updating</h1>
+
+    <div class="updating-wrapper">
+      <div class="updating-info">
+        <h2>Updating lifecycle</h2>
+        <p>Learn all about a Progressive Web App's update lifecycle</p>
+      </div>
+      <img class="updating-img" loading="lazy" src={clientsClaim} alt=""/>
+    </div>
+  </div>
+
+  <div class="section installing">
+    <h1 class="big-title">Installability</h1>
+    <img class="installing-img" loading="lazy" src={installing} alt=""/>
+  </div>
+
+  <div class="section sub">
+    <h1 class="big-title" id="register">Register!</h1>
+    <div class="sub-card card">
+      <h2>Pricing</h2>
+      <p>For a measly <strong>€10,00</strong> a month (21% VAT incl.), you'll have access to your favourite course.</p>
+      <p class="notification">For demoing purposes, this will take you to the sandbox payment environment. <br/>You can try it out for free, and then check out the interactive course part of this site.</p>
+      {user.authed
+        ? <a class="subscribe linkbutton-secondary outline" href="/mollie/pay">Subscribe</a>
+        : <div>
+          <p>Please sign in first.</p>
+          <a class="linkbutton-secondary outline" href="/auth/login">Login</a>
+        </div>
+      }
+      
+    </div>
+
+  </div>
+</Main>

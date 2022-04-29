@@ -1,2 +1,3 @@
-[functions]
-  external_node_modules = ["@astrojs/markdown-remark"]
+[[edge_functions]]
+path = "/protected/*"
+function = "protected"

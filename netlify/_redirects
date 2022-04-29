@@ -1,0 +1,21 @@
+
+/    /.netlify/functions/entry    200
+/settings    /.netlify/functions/entry    200
+/mollie/cancel-subscription    /.netlify/functions/entry    200
+/mollie/webhook-test    /.netlify/functions/entry    200
+/mollie/webhook    /.netlify/functions/entry    200
+/mollie/pay    /.netlify/functions/entry    200
+/mollie/cb    /.netlify/functions/entry    200
+/mollie/*/payment-cb    /.netlify/functions/entry    200
+/admin    /.netlify/functions/entry    200
+/admin/*    /.netlify/functions/entry    200
+/error    /.netlify/functions/entry    200
+/utils/auth    /.netlify/functions/entry    200
+/auth/success    /.netlify/functions/entry    200
+/auth/logout    /.netlify/functions/entry    200
+/auth/login    /.netlify/functions/entry    200
+/db/ActivationToken    /.netlify/functions/entry    200
+/db/User    /.netlify/functions/entry    200
+/*/subscribe    /.netlify/functions/entry    200
+/*/*/courseIndex    /.netlify/functions/entry    200
+/*/*    /.netlify/functions/entry    200

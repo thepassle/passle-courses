@@ -6,7 +6,7 @@
     "start": "astro dev --experimental-integrations",
     "build": "node scripts/prepare-md.js && astro build --experimental-integrations",
     "preview": "astro preview",
-    "deploy:prod": "npm run build && netlify deploy --prod --dir=netlify"
+    "deploy:prod": "npm run build && cp -R ./edge-functions ./netlify && netlify deploy --prod --build --dir=netlify"
   },
   "dependencies": {
     "@astrojs/lit": "^0.1.1",

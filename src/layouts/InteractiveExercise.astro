@@ -1,5 +1,5 @@
 ---
-const { validator, isLastLesson, hasNextChapter, lesson, chapter, next, title } = Astro.props;
+const { validator, isLastLesson, hasNextChapter, course, lesson, chapter, next, title } = Astro.props;
 const prod = import.meta.env.ENV === 'prod';
 ---
 <!doctype html>
@@ -12,7 +12,7 @@ const prod = import.meta.env.ENV === 'prod';
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;800" rel="stylesheet">
   <base href="/">
 
   <style is:global>
@@ -205,7 +205,7 @@ const prod = import.meta.env.ENV === 'prod';
   
   <div class="master">
     <slot name="sidebar"></slot>
-    <interactive-exercise isLastLesson={isLastLesson} hasNextChapter={hasNextChapter} next={next} chapter={chapter} lesson={lesson} validator={validator}></interactive-exercise>
+    <interactive-exercise isLastLesson={isLastLesson} hasNextChapter={hasNextChapter} next={next} course={course} chapter={chapter} lesson={lesson} validator={validator}></interactive-exercise>
   </div>
   <script type="module" src="./interactive-exercise.js"></script>
   <script define:vars={{ prod }}>
